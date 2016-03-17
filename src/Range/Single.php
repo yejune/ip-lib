@@ -31,7 +31,7 @@ class Single implements RangeInterface
     /**
      * Try get the range instance starting from its string representation.
      *
-     * @param string|mixed $address
+     * @param string|mixed $range
      *
      * @return static|null
      */
