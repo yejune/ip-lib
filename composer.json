@@ -10,7 +10,7 @@
         "network",
         "networking",
         "address",
-        "addresses"
+        "addresses",
         "subnet",
         "matching"
     ],
@@ -28,7 +28,7 @@
         "psr-4": {
             "IPLib\\": "src/"
         }
-    }
+    },
     "require": {
         "php": ">=5.3.3"
     }
