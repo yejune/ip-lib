@@ -178,6 +178,7 @@ class IPv6 implements AddressInterface
 
         return $result;
     }
+
     /**
      * {@inheritdoc}
      *

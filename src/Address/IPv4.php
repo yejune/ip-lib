@@ -107,6 +107,7 @@ class IPv4 implements AddressInterface
 
         return $result;
     }
+
     /**
      * {@inheritdoc}
      *
