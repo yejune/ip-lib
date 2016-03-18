@@ -10,6 +10,11 @@
 
 This library can handle IPv4, IPv6 addresses, as well as IP ranges, in CIDR formats (like `::1/128` or `127.0.0.1/32`) and in pattern format (like `::*:*` or `127.0.*.*`).
 
+## Requirements
+
+The only requirement is PHP 5.3.3.
+__No external dependencies__ and __no special PHP configuration__ are needed (yes, it will __always work__ even if PHP has not been build with IPv6 support!).
+
 ## Manual installation
 
 [Download](https://github.com/mlocati/ip-lib/releases) the latest version, unzip it and add these lines in our PHP files:
