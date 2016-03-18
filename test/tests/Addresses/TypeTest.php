@@ -176,6 +176,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             array('255.255.255.253', Type::T_RESERVED),
             array('255.255.255.254', Type::T_RESERVED),
             // Public addresses
+            array('2001:503:ba3e::2:30', Type::T_PUBLIC),
             array('216.58.212.68', Type::T_PUBLIC),
             array('31.11.33.139', Type::T_PUBLIC),
             array('104.25.25.33', Type::T_PUBLIC),

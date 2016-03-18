@@ -15,7 +15,7 @@ This library can handle IPv4, IPv6 addresses, as well as IP ranges, in CIDR form
 ## Requirements
 
 The only requirement is PHP 5.3.3.
-__No external dependencies__ and __no special PHP configuration__ are needed (yes, it will __always work__ even if PHP has not been build with IPv6 support!).
+__No external dependencies__ and __no special PHP configuration__ are needed (yes, it will __always work__ even if PHP has not been built with IPv6 support!).
 
 
 ## Manual installation
@@ -144,3 +144,74 @@ $contained = $range->contains($address);
 ```
 
 Please remark that if the address is IPv4 and the range is IPv6 (or vice-versa), the result will always be `false`.
+
+
+### Getting the type of an IP address
+
+If you want to know if an address is within a private network, or if it's a public IP, or whatever you want, you can use the `getRangeType` method:
+
+```php
+$address = \IPLib\Factory::addressFromString('::');
+
+$typeID = $address->getRangeType();
+
+$typeName = \IPLib\Range\Type::getName();
+```
+
+The most notable values of the range type ID are:
+-  `\IPLib\Range\Type::T_UNSPECIFIED` if the address is all zeros (`0.0.0.0` or `::`)
+-  `\IPLib\Range\Type::T_LOOPBACK` if the address is the localhost (usually `127.0.0.1` or `::1`)
+-  `\IPLib\Range\Type::T_PRIVATENETWORK` if the address is in the local network (for instance `192.168.0.1` or `fc00::1`)
+-  `\IPLib\Range\Type::T_PUBLIC` if the address is for public usage (for instance `104.25.25.33` or `2001:503:ba3e::2:30`)
+
+ 
+### Using a database
+
+This package offers a great feature: you can store address ranges in a database table, and check if an address is contained in one of the saved ranges with a simple query.
+
+To save a range, you need to store the address type (for IPv4 it's `4`, for IPv6 it's `6`), as well as two values representing the start and the end of the range.
+These methods are:
+```php
+$range->getAddressType();
+$range->getComparableStartString();
+$range->getComparableEndString();
+```
+
+Let's assume that you saved the type in a field called `addressType`, and the range boundaries in two fields called `rangeFrom` and `rangeTo`.
+
+When you want to check if an address is within a stored range, simply use the `getComparableString` method of the address and check if it's between the fields `rangeFrom` and `rangeTo`, and check if the stored `addressType` is the same as the one of the address instance you want to check.
+
+Here's a sample code:
+
+```php
+/*
+ * Let's assume that:
+ * - $pdo is a PDO instance
+ * - $range is a range object
+ * - $address is an address object
+ */
+
+// Save the $range object
+$insertQuery = $pdo->prepare('
+    insert into ranges (addressType, rangeFrom, rangeTo)
+    values (:addressType, :rangeFrom, :rangeTo)
+');
+$insertQuery->execute(array(
+    ':addressType' => $rangeObject->getAddressType(),
+    ':rangeFrom' => $rangeObject->getComparableStartString(),
+    ':rangeTo' => $rangeObject->getComparableEndString(),
+));
+
+// Retrieve the saved ranges where an address $address falls:
+$searchQuery = $pdo->prepare('
+    select * from ranges
+    where addressType = :addressType
+    and :address between rangeFrom and rangeTo
+');
+$searchQuery->execute(array(
+    ':addressType' => $addressObject->getAddressType(),
+    ':address' => $addressObject->getComparableString(),
+));
+$rows = $searchQuery->fetchAll();
+$searchQuery->closeCursor();
+```
