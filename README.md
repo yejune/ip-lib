@@ -1,5 +1,6 @@
 [![Build Status](https://api.travis-ci.org/mlocati/ip-lib.svg?branch=master)](https://travis-ci.org/mlocati/ip-lib)
 [![HHVM Status](http://hhvm.h4cc.de/badge/mlocati/ip-lib.svg)](http://hhvm.h4cc.de/package/mlocati/ip-lib) 
+[![StyleCI Status](https://styleci.io/repos/54139375/shield)](https://styleci.io/repos/54139375)
 
 # IPLib - Handle IPv4, IPv6 and IP ranges
 
