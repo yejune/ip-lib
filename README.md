@@ -6,14 +6,17 @@
 
 # IPLib - Handle IPv4, IPv6 and IP ranges
 
+
 ## Introduction
 
 This library can handle IPv4, IPv6 addresses, as well as IP ranges, in CIDR formats (like `::1/128` or `127.0.0.1/32`) and in pattern format (like `::*:*` or `127.0.*.*`).
+
 
 ## Requirements
 
 The only requirement is PHP 5.3.3.
 __No external dependencies__ and __no special PHP configuration__ are needed (yes, it will __always work__ even if PHP has not been build with IPv6 support!).
+
 
 ## Manual installation
 
@@ -22,6 +25,7 @@ __No external dependencies__ and __no special PHP configuration__ are needed (ye
 ```php
 require_once 'path/to/iplib/ip-lib.php';
 ```
+
 
 ## Installation with Composer
 
@@ -33,7 +37,9 @@ Simply run `composer install mlocati/ip-lib`, or add these lines to your `compos
 }
 ```
 
+
 ## Sample usage
+
 
 ### Parse an address
 
@@ -55,6 +61,7 @@ To parse an address in any format (IPv4 or IPv6):
 $address = \IPLib\Factory::addressFromString('::1');
 $address = \IPLib\Factory::addressFromString('127.0.0.1');
 ```
+
 
 ### Parse an IP address range
 
@@ -86,6 +93,7 @@ $range = \IPLib\Factory::rangeFromString('127.0.0.*');
 $range = \IPLib\Factory::rangeFromString('::1/128');
 $range = \IPLib\Factory::rangeFromString('::');
 ```
+
 
 ### Format addresses and ranges
 
@@ -120,6 +128,7 @@ echo \IPLib\Factory::addressFromString('1:2:3:4:5:6:7:8')->toString(true);
 echo \IPLib\Factory::rangeFromString('0:0::1/64')->toString();
 // prints 0000:0000:0000:0000:0000:0000:0000:0001/64
 ```
+
 
 ### Check if an address is contained in a range
 
