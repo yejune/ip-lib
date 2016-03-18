@@ -1,9 +1,11 @@
 <?php
 
+namespace IPLib\Test\Addresses;
+
 use IPLib\Address\IPv4;
 use IPLib\Address\IPv6;
 
-class InvalidTest extends PHPUnit_Framework_TestCase
+class InvalidTest extends \PHPUnit_Framework_TestCase
 {
     public function invalidAddressesProvider()
     {

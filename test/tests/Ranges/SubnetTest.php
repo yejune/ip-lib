@@ -1,9 +1,11 @@
 <?php
 
+namespace IPLib\Test\Ranges;
+
 use IPLib\Factory;
 use IPLib\Range\Subnet;
 
-class SubnetTest extends PHPUnit_Framework_TestCase
+class SubnetTest extends \PHPUnit_Framework_TestCase
 {
     public function invalidProvider()
     {

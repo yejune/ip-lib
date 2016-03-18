@@ -1,10 +1,14 @@
 <?php
 
+namespace IPLib\Test\Membership;
+
 use IPLib\Factory;
 
-require_once __DIR__.'/../SQLiteDatabase.php';
+if (!class_exists('IPLib\Test\SQLiteDatabase')) {
+    require_once __DIR__.'/../SQLiteDatabase.php';
+}
 
-class MembershipTest extends SQLiteDatabase
+class MembershipTest extends \IPLib\Test\SQLiteDatabase
 {
     public function membershipProvider()
     {

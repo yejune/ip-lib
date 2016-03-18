@@ -1,9 +1,11 @@
 <?php
 
+namespace IPLib\Test\Addresses;
+
 use IPLib\Factory;
 use IPLib\Range\Type;
 
-class TypeTest extends PHPUnit_Framework_TestCase
+class TypeTest extends \PHPUnit_Framework_TestCase
 {
     public function ipV4TypesProvider()
     {

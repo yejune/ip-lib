@@ -1,6 +1,10 @@
 <?php
 
-abstract class SQLiteDatabase extends PHPUnit_Extensions_Database_TestCase
+namespace IPLib\Test;
+
+use PDO;
+
+abstract class SQLiteDatabase extends \PHPUnit_Extensions_Database_TestCase
 {
     /**
      * @var PDO|null

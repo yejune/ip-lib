@@ -1,8 +1,10 @@
 <?php
 
+namespace IPLib\Test\Addresses;
+
 use IPLib\Factory;
 
-class ValidTest extends PHPUnit_Framework_TestCase
+class ValidTest extends \PHPUnit_Framework_TestCase
 {
     public function validAddressesProvider()
     {
