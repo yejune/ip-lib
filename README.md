@@ -2,6 +2,7 @@
 [![HHVM Status](http://hhvm.h4cc.de/badge/mlocati/ip-lib.svg)](http://hhvm.h4cc.de/package/mlocati/ip-lib) 
 [![StyleCI Status](https://styleci.io/repos/54139375/shield)](https://styleci.io/repos/54139375)
 [![Coverage Status](https://coveralls.io/repos/github/mlocati/ip-lib/badge.svg?branch=master)](https://coveralls.io/github/mlocati/ip-lib?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/mlocati/ip-lib/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/mlocati/ip-lib/?branch=master)
 
 # IPLib - Handle IPv4, IPv6 and IP ranges
 
