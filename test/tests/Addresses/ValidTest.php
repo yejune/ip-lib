@@ -27,6 +27,7 @@ class ValidTest extends PHPUnit_Framework_TestCase
         $ip = Factory::addressFromString($address);
         $this->assertNotNull($ip, "'$str' has been detected as an invalid IP, but it should be valid");
         $this->assertSame($short, $ip->toString(false));
+        $this->assertSame($short, $ip->__toString());
         $this->assertSame($long, $ip->toString(true));
     }
 }
