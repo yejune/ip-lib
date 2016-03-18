@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <table name="ranges">
+        <column>id</column>
+        <column>addressType</column>
+        <column>rangeRepresentation</column>
+        <column>rangeFrom</column>
+        <column>rangeTo</column>
+    </table>
+</dataset>

@@ -2,7 +2,9 @@
 
 use IPLib\Factory;
 
-class MembershipTest extends PHPUnit_Framework_TestCase
+require_once __DIR__.'/../SQLiteDatabase.php';
+
+class MembershipTest extends SQLiteDatabase
 {
     public function membershipProvider()
     {
@@ -19,6 +21,7 @@ class MembershipTest extends PHPUnit_Framework_TestCase
             array('127.0.0.0', '127.0.1.255/16', true),
             array('::', '::', true),
             array('::1', '::', false),
+            array('::', '::1', false),
             array('::1', '::*', true),
             array('::1:1', '::*', false),
             array('::1:1', '::1:*', true),
@@ -55,6 +58,26 @@ class MembershipTest extends PHPUnit_Framework_TestCase
         } else {
             $this->assertSame(false, $rangeObject->contains($addressObject), "Failed to check that '$rangeStr' does not contain '$addressStr'");
             $this->assertSame(false, $addressObject->matches($rangeObject), "Failed to check that '$addressStr' is not contained in '$rangeStr'");
+        }
+        $pdo = $this->getConnection()->getConnection();
+        $insertQuery = $pdo->prepare('insert into ranges (rangeRepresentation, addressType, rangeFrom, rangeTo) values (:rangeRepresentation, :addressType, :rangeFrom, :rangeTo)');
+        $insertQuery->execute(array(
+            ':rangeRepresentation' => $rangeObject->__toString(),
+            ':addressType' => $rangeObject->getAddressType(),
+            ':rangeFrom' => $rangeObject->getComparableStartString(),
+            ':rangeTo' => $rangeObject->getComparableEndString(),
+        ));
+        $searchQuery = $pdo->prepare('select id from ranges where addressType = :addressType and :address between rangeFrom and rangeTo');
+        $searchQuery->execute(array(
+            ':addressType' => $addressObject->getAddressType(),
+            ':address' => $addressObject->getComparableString(),
+        ));
+        $foundRow = $searchQuery->fetch();
+        $searchQuery->closeCursor();
+        if ($contained) {
+            $this->assertNotEmpty($foundRow, "Failed to check that '$rangeStr' contains '$addressStr' using database comparison");
+        } else {
+            $this->assertFalse($foundRow, "Failed to check that '$rangeStr' does not contain '$addressStr' using database comparison");
         }
     }
 }
