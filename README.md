@@ -197,9 +197,9 @@ $insertQuery = $pdo->prepare('
     values (:addressType, :rangeFrom, :rangeTo)
 ');
 $insertQuery->execute(array(
-    ':addressType' => $rangeObject->getAddressType(),
-    ':rangeFrom' => $rangeObject->getComparableStartString(),
-    ':rangeTo' => $rangeObject->getComparableEndString(),
+    ':addressType' => $range->getAddressType(),
+    ':rangeFrom' => $range->getComparableStartString(),
+    ':rangeTo' => $range->getComparableEndString(),
 ));
 
 // Retrieve the saved ranges where an address $address falls:
@@ -209,8 +209,8 @@ $searchQuery = $pdo->prepare('
     and :address between rangeFrom and rangeTo
 ');
 $searchQuery->execute(array(
-    ':addressType' => $addressObject->getAddressType(),
-    ':address' => $addressObject->getComparableString(),
+    ':addressType' => $address->getAddressType(),
+    ':address' => $address->getComparableString(),
 ));
 $rows = $searchQuery->fetchAll();
 $searchQuery->closeCursor();
