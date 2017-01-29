@@ -52,7 +52,7 @@ class Factory
      *
      * @param string $range
      *
-     * @return Range\RangeInterface
+     * @return Range\RangeInterface|null
      */
     public static function rangeFromString($range)
     {
