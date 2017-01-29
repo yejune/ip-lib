@@ -2,8 +2,8 @@
 
 namespace IPLib\Address;
 
-use IPLib\Range\Subnet;
 use IPLib\Range\RangeInterface;
+use IPLib\Range\Subnet;
 use IPLib\Range\Type as RangeType;
 
 /**

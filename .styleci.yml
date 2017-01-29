@@ -1,0 +1,16 @@
+preset: recommended
+
+risky: true
+
+enabled:
+  - long_array_syntax
+
+disabled:
+  - short_array_syntax
+  - phpdoc_align
+
+finder:
+  exclude:
+    - "test"
+  name:
+    - "*.php"
