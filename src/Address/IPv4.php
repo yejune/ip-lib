@@ -23,7 +23,7 @@ class IPv4 implements AddressInterface
     /**
      * The byte list of the IP address.
      *
-     * @var array|null
+     * @var int[]|null
      */
     protected $bytes;
 

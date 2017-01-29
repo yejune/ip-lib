@@ -32,14 +32,14 @@ class IPv6 implements AddressInterface
     /**
      * The byte list of the IP address.
      *
-     * @var array|null
+     * @var int[]|null
      */
     protected $bytes;
 
     /**
      * The word list of the IP address.
      *
-     * @var array|null
+     * @var int[]|null
      */
     protected $words;
 
