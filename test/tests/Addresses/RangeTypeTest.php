@@ -276,4 +276,21 @@ class TypeTest extends PHPUnit_Framework_TestCase
         $detectedType = $ip->getRangeType();
         $this->assertSame($expectedType, $detectedType, sprintf("'%s' has been detected as\n%s\ninstead of\n%s", $ip->toString(), Type::getName($detectedType), Type::getName($expectedType)));
     }
+
+    public function rangeTypeNameProvider()
+    {
+        return array(
+            array(null, 'Unknown type ()'),
+            array('x', 'Unknown type (x)'),
+            array(-1, 'Unknown type (-1)'),
+        );
+    }
+
+    /**
+     * @dataProvider rangeTypeNameProvider
+     */
+    public function testRangeTypeName($type, $expectedName)
+    {
+        $this->assertSame($expectedName, Type::getName($type));
+    }
 }
