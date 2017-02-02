@@ -79,42 +79,55 @@ class IPv6 implements AddressInterface
             if ($mayIncludePort && $address[0] === '[' && preg_match('/^\[(.+)\]:\d+$/', $address, $matches)) {
                 $address = $matches[1];
             }
-            if (strpos($address, '::') === false) {
-                $chunks = explode(':', $address);
-            } else {
-                $chunks = array();
-                $parts = explode('::', $address);
-                if (count($parts) === 2) {
-                    $before = ($parts[0] === '') ? array() : explode(':', $parts[0]);
-                    $after = ($parts[1] === '') ? array() : explode(':', $parts[1]);
-                    $missing = 8 - count($before) - count($after);
-                    if ($missing >= 0) {
-                        $chunks = $before;
-                        if ($missing !== 0) {
-                            $chunks = array_merge($chunks, array_fill(0, $missing, '0'));
-                        }
-                        $chunks = array_merge($chunks, $after);
+            if (preg_match('/^([0:]+:ffff:)(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})$/i', $address, $matches)) {
+                // IPv4 embedded in IPv6
+                $address6 = static::fromString($matches[1].'0:0', false);
+                if ($address6 !== null) {
+                    $address4 = IPv4::fromString($matches[2], false);
+                    if ($address4 !== null) {
+                        $bytes4 = $address4->getBytes();
+                        $address6->longAddress = substr($address6->longAddress, 0, -9).sprintf('%02x%02x:%02x%02x', $bytes4[0], $bytes4[1], $bytes4[2], $bytes4[3]);
+                        $result = $address6;
                     }
                 }
-            }
-            if (count($chunks) === 8) {
-                $nums = array_map(
-                    function ($chunk) {
-                        return preg_match('/^[0-9A-Fa-f]{1,4}$/', $chunk) ? hexdec($chunk) : false;
-                    },
-                    $chunks
-                );
-                if (!in_array(false, $nums, true)) {
-                    $longAddress = implode(
-                        ':',
-                        array_map(
-                            function ($num) {
-                                return sprintf('%04x', $num);
-                            },
-                            $nums
-                        )
+            } else {
+                if (strpos($address, '::') === false) {
+                    $chunks = explode(':', $address);
+                } else {
+                    $chunks = array();
+                    $parts = explode('::', $address);
+                    if (count($parts) === 2) {
+                        $before = ($parts[0] === '') ? array() : explode(':', $parts[0]);
+                        $after = ($parts[1] === '') ? array() : explode(':', $parts[1]);
+                        $missing = 8 - count($before) - count($after);
+                        if ($missing >= 0) {
+                            $chunks = $before;
+                            if ($missing !== 0) {
+                                $chunks = array_merge($chunks, array_fill(0, $missing, '0'));
+                            }
+                            $chunks = array_merge($chunks, $after);
+                        }
+                    }
+                }
+                if (count($chunks) === 8) {
+                    $nums = array_map(
+                        function ($chunk) {
+                            return preg_match('/^[0-9A-Fa-f]{1,4}$/', $chunk) ? hexdec($chunk) : false;
+                        },
+                        $chunks
                     );
-                    $result = new static($longAddress);
+                    if (!in_array(false, $nums, true)) {
+                        $longAddress = implode(
+                            ':',
+                            array_map(
+                                function ($num) {
+                                    return sprintf('%04x', $num);
+                                },
+                                $nums
+                            )
+                        );
+                        $result = new static($longAddress);
+                    }
                 }
             }
         }
@@ -194,21 +207,26 @@ class IPv6 implements AddressInterface
             $result = $this->longAddress;
         } else {
             if ($this->shortAddress === null) {
-                $chunks = array_map(
-                    function ($word) {
-                        return dechex($word);
-                    },
-                    $this->getWords()
-                );
-                $shortAddress = implode(':', $chunks);
-                for ($i = 8; $i > 1; --$i) {
-                    $search = '(?:^|:)'.rtrim(str_repeat('0:', $i), ':').'(?:$|:)';
-                    if (preg_match('/^(.*?)'.$search.'(.*)$/', $shortAddress, $matches)) {
-                        $shortAddress = $matches[1].'::'.$matches[2];
-                        break;
+                if (strpos($this->longAddress, '0000:0000:0000:0000:0000:ffff:') === 0) {
+                    $lastBytes = array_slice($this->getBytes(), -4);
+                    $this->shortAddress = '::ffff:'.implode('.', $lastBytes);
+                } else {
+                    $chunks = array_map(
+                        function ($word) {
+                            return dechex($word);
+                        },
+                        $this->getWords()
+                    );
+                    $shortAddress = implode(':', $chunks);
+                    for ($i = 8; $i > 1; --$i) {
+                        $search = '(?:^|:)'.rtrim(str_repeat('0:', $i), ':').'(?:$|:)';
+                        if (preg_match('/^(.*?)'.$search.'(.*)$/', $shortAddress, $matches)) {
+                            $shortAddress = $matches[1].'::'.$matches[2];
+                            break;
+                        }
                     }
+                    $this->shortAddress = $shortAddress;
                 }
-                $this->shortAddress = $shortAddress;
             }
             $result = $this->shortAddress;
         }
