@@ -277,7 +277,6 @@ class AddressTypeTest extends PHPUnit_Framework_TestCase
         $this->assertSame($expectedType, $detectedType, sprintf("'%s' has been detected as\n%s\ninstead of\n%s", $ip->toString(), Type::getName($detectedType), Type::getName($expectedType)));
     }
 
-
     public function addressTypeNameProvider()
     {
         return array(
@@ -286,7 +285,7 @@ class AddressTypeTest extends PHPUnit_Framework_TestCase
             array(-1, 'Unknown type (-1)'),
         );
     }
-    
+
     /**
      * @dataProvider addressTypeNameProvider
      */

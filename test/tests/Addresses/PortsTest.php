@@ -39,7 +39,7 @@ class PortsTest extends PHPUnit_Framework_TestCase
             array('[::1]:a', true),
         );
     }
-    
+
     /**
      * @dataProvider invalidAddresses
      */
