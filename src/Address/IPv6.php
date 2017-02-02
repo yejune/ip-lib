@@ -267,7 +267,7 @@ class IPv6 implements AddressInterface
      */
     public function getAddressType()
     {
-        return Type::T_IPv4;
+        return Type::T_IPv6;
     }
 
     /**
