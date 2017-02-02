@@ -64,7 +64,7 @@ class Subnet implements RangeInterface
                 $address = Factory::addressFromString($parts[0]);
                 if ($address !== null) {
                     if (preg_match('/^[0-9]{1,9}$/', $parts[1])) {
-                        $networkPrefix = @intval($parts[1]);
+                        $networkPrefix = (int) $parts[1];
                         if ($networkPrefix >= 0) {
                             $addressBytes = $address->getBytes();
                             $totalBytes = count($addressBytes);

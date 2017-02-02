@@ -75,7 +75,7 @@ class IPv4 implements AddressInterface
                 $nums = array();
                 for ($i = 1; $ok && $i <= 4; ++$i) {
                     $ok = false;
-                    $n = intval($matches[$i], 10);
+                    $n = (int) $matches[$i];
                     if ($n >= 0 && $n <= 255) {
                         $ok = true;
                         $nums[] = (string) $n;
