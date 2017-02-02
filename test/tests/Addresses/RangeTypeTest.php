@@ -271,9 +271,8 @@ class TypeTest extends PHPUnit_Framework_TestCase
      */
     public function testRangeTypes($address, $expectedType)
     {
-        $str = @strval($address);
         $ip = Factory::addressFromString($address);
-        $this->assertNotNull($ip, "'$str' has been detected as an invalid IP, but it should be valid");
+        $this->assertNotNull($ip, "'$address' has been detected as an invalid IP, but it should be valid");
         $detectedType = $ip->getRangeType();
         $this->assertSame($expectedType, $detectedType, sprintf("'%s' has been detected as\n%s\ninstead of\n%s", $ip->toString(), Type::getName($detectedType), Type::getName($expectedType)));
     }
