@@ -57,8 +57,8 @@ class IPv4 implements AddressInterface
     /**
      * Parse a string and returns an IPv4 instance if the string is valid, or null otherwise.
      *
-     * @param string|mixed $address The address to parse.
-     * @param bool $mayIncludePort Set to false to avoid parsing addresses with ports.
+     * @param string|mixed $address the address to parse
+     * @param bool $mayIncludePort set to false to avoid parsing addresses with ports
      *
      * @return static|null
      */

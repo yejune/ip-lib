@@ -10,8 +10,8 @@ class Factory
     /**
      * Parse an IP address string.
      *
-     * @param string $address The address to parse.
-     * @param bool $mayIncludePort Set to false to avoid parsing addresses with ports.
+     * @param string $address the address to parse
+     * @param bool $mayIncludePort set to false to avoid parsing addresses with ports
      *
      * @return Address\AddressInterface|null
      */

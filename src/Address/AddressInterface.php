@@ -12,7 +12,7 @@ interface AddressInterface
     /**
      * Get the string representation of this address.
      *
-     * @param bool $long Set to true to have a long/full representation, false otherwise.
+     * @param bool $long set to true to have a long/full representation, false otherwise
      *
      * @return string
      *

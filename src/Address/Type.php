@@ -39,5 +39,4 @@ class Type
                 return sprintf('Unknown type (%s)', $type);
         }
     }
-    
 }
