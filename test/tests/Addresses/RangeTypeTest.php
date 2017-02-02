@@ -4,10 +4,11 @@ namespace IPLib\Test\Addresses;
 
 use IPLib\Factory;
 use IPLib\Range\Type;
+use PHPUnit_Framework_TestCase;
 
-class TypeTest extends \PHPUnit_Framework_TestCase
+class TypeTest extends PHPUnit_Framework_TestCase
 {
-    public function ipV4TypesProvider()
+    public function ipProvider()
     {
         return array(
             // 0.0.0.0/32
@@ -180,24 +181,6 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             array('216.58.212.68', Type::T_PUBLIC),
             array('31.11.33.139', Type::T_PUBLIC),
             array('104.25.25.33', Type::T_PUBLIC),
-        );
-    }
-
-    /**
-     * @dataProvider ipV4TypesProvider
-     */
-    public function testIPv4Types($address, $type)
-    {
-        $str = @strval($address);
-        $ip = Factory::addressFromString($address);
-        $this->assertNotNull($ip, "'$str' has been detected as an invalid IP, but it should be valid");
-        $detectedType = $ip->getRangeType();
-        $this->assertSame($type, $detectedType, sprintf("'%s' has been detected as\n%s\ninstead of\n%s", $ip->toString(), Type::getName($detectedType), Type::getName($type)));
-    }
-
-    public function ipV6TypesProvider()
-    {
-        return array(
             // ::/128
             array('0000:0000:0000:0000:0000:0000:0000:0000', Type::T_UNSPECIFIED),
             // ::1/128
@@ -284,14 +267,14 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider ipV6TypesProvider
+     * @dataProvider ipProvider
      */
-    public function testIPv6Types($address, $type)
+    public function testRangeTypes($address, $expectedType)
     {
         $str = @strval($address);
         $ip = Factory::addressFromString($address);
         $this->assertNotNull($ip, "'$str' has been detected as an invalid IP, but it should be valid");
         $detectedType = $ip->getRangeType();
-        $this->assertSame($type, $detectedType, sprintf("'%s' has been detected as\n%s\ninstead of\n%s", $ip->toString(), Type::getName($detectedType), Type::getName($type)));
+        $this->assertSame($expectedType, $detectedType, sprintf("'%s' has been detected as\n%s\ninstead of\n%s", $ip->toString(), Type::getName($detectedType), Type::getName($expectedType)));
     }
 }
