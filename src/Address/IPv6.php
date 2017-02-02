@@ -67,14 +67,18 @@ class IPv6 implements AddressInterface
     /**
      * Parse a string and returns an IPv6 instance if the string is valid, or null otherwise.
      *
-     * @param string|mixed $address
+     * @param string|mixed $address The address to parse.
+     * @param bool $mayIncludePort Set to false to avoid parsing addresses with ports.
      *
      * @return static|null
      */
-    public static function fromString($address)
+    public static function fromString($address, $mayIncludePort = true)
     {
         $result = null;
         if (is_string($address) && strpos($address, ':') !== false && strpos($address, ':::') === false) {
+            if ($mayIncludePort && $address[0] === '[' && preg_match('/^\[(.+)\]:\d+$/', $address, $matches)) {
+                $address = $matches[1];
+            }
             if (strpos($address, '::') === false) {
                 $chunks = explode(':', $address);
             } else {

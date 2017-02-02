@@ -57,26 +57,33 @@ class IPv4 implements AddressInterface
     /**
      * Parse a string and returns an IPv4 instance if the string is valid, or null otherwise.
      *
-     * @param string|mixed $address
+     * @param string|mixed $address The address to parse.
+     * @param bool $mayIncludePort Set to false to avoid parsing addresses with ports.
      *
      * @return static|null
      */
-    public static function fromString($address)
+    public static function fromString($address, $mayIncludePort = true)
     {
         $result = null;
-        if (is_string($address) && strpos($address, '.') && preg_match('/^([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})$/', $address, $matches)) {
-            $ok = true;
-            $nums = array();
-            for ($i = 1; $ok && $i <= 4; ++$i) {
-                $ok = false;
-                $n = intval($matches[$i], 10);
-                if ($n >= 0 && $n <= 255) {
-                    $ok = true;
-                    $nums[] = (string) $n;
-                }
+        if (is_string($address) && strpos($address, '.')) {
+            $rx = '([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})';
+            if ($mayIncludePort) {
+                $rx .= '(?::\d+)?';
             }
-            if ($ok) {
-                $result = new static(implode('.', $nums));
+            if (preg_match('/^'.$rx.'$/', $address, $matches)) {
+                $ok = true;
+                $nums = array();
+                for ($i = 1; $ok && $i <= 4; ++$i) {
+                    $ok = false;
+                    $n = intval($matches[$i], 10);
+                    if ($n >= 0 && $n <= 255) {
+                        $ok = true;
+                        $nums[] = (string) $n;
+                    }
+                }
+                if ($ok) {
+                    $result = new static(implode('.', $nums));
+                }
             }
         }
 

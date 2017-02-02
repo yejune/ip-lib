@@ -10,18 +10,19 @@ class Factory
     /**
      * Parse an IP address string.
      *
-     * @param string $address
+     * @param string $address The address to parse.
+     * @param bool $mayIncludePort Set to false to avoid parsing addresses with ports.
      *
      * @return Address\AddressInterface|null
      */
-    public static function addressFromString($address)
+    public static function addressFromString($address, $mayIncludePort = true)
     {
         $result = null;
         if ($result === null) {
-            $result = Address\IPv4::fromString($address);
+            $result = Address\IPv4::fromString($address, $mayIncludePort);
         }
         if ($result === null) {
-            $result = Address\IPv6::fromString($address);
+            $result = Address\IPv6::fromString($address, $mayIncludePort);
         }
 
         return $result;
