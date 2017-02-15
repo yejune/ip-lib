@@ -95,6 +95,15 @@ $range = \IPLib\Factory::rangeFromString('::');
 ```
 
 
+### Retrive a range from its boundaries
+
+```php
+$range = \IPLib\Factory::rangeFromBoundaries('192.168.0.1', '192.168.255.255');
+echo (string) $range;
+// prints 192.168.0.0/16
+```
+
+
 ### Format addresses and ranges
 
 Both IP addresses and ranges have a `toString` method that you can use to retrieve a textual representation:
