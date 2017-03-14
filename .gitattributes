@@ -4,3 +4,5 @@
 /*.xml export-ignore
 /README.md
 /composer-travis-ci.json export-ignore
+/composer-travis-ci-coverage-no.json export-ignore
+/composer-travis-ci-coverage-yes.json export-ignore
