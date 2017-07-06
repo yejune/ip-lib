@@ -69,15 +69,22 @@ class IPv6 implements AddressInterface
      *
      * @param string|mixed $address the address to parse
      * @param bool $mayIncludePort set to false to avoid parsing addresses with ports
+     * @param bool $mayIncludeZoneID set to false to avoid parsing addresses with zone IDs (see RFC 4007)
      *
      * @return static|null
      */
-    public static function fromString($address, $mayIncludePort = true)
+    public static function fromString($address, $mayIncludePort = true, $mayIncludeZoneID = true)
     {
         $result = null;
         if (is_string($address) && strpos($address, ':') !== false && strpos($address, ':::') === false) {
             if ($mayIncludePort && $address[0] === '[' && preg_match('/^\[(.+)\]:\d+$/', $address, $matches)) {
                 $address = $matches[1];
+            }
+            if ($mayIncludeZoneID) {
+                $percentagePos = strpos($address, '%');
+                if ($percentagePos > 0) {
+                    $address = substr($address, 0, $percentagePos);
+                }
             }
             if (preg_match('/^([0:]+:ffff:)(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})$/i', $address, $matches)) {
                 // IPv4 embedded in IPv6

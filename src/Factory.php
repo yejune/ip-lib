@@ -14,17 +14,18 @@ class Factory
      *
      * @param string $address the address to parse
      * @param bool $mayIncludePort set to false to avoid parsing addresses with ports
+     * @param bool $mayIncludeZoneID set to false to avoid parsing IPv6 addresses with zone IDs (see RFC 4007)
      *
      * @return Address\AddressInterface|null
      */
-    public static function addressFromString($address, $mayIncludePort = true)
+    public static function addressFromString($address, $mayIncludePort = true, $mayIncludeZoneID = true)
     {
         $result = null;
         if ($result === null) {
             $result = Address\IPv4::fromString($address, $mayIncludePort);
         }
         if ($result === null) {
-            $result = Address\IPv6::fromString($address, $mayIncludePort);
+            $result = Address\IPv6::fromString($address, $mayIncludePort, $mayIncludeZoneID);
         }
 
         return $result;
