@@ -22,6 +22,8 @@ matrix:
   include:
     - php: hhvm
       dist: trusty
+      env:
+        - GET_COVERAGE=no
   exclude:
     - php: 5.3
       env: GET_COVERAGE=yes
