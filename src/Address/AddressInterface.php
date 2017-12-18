@@ -53,7 +53,7 @@ interface AddressInterface
     /**
      * Get the RFC reserved ranges (except the ones of type getDefaultReservedRangeType).
      *
-     * @return \IPLib\Address\AssignedRange ranges are sorted
+     * @return \IPLib\Address\AssignedRange[] ranges are sorted
      */
     public static function getReservedRanges();
 
