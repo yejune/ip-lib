@@ -176,6 +176,17 @@ $contained = $range->contains($address);
 Please remark that if the address is IPv4 and the range is IPv6 (or vice-versa), the result will always be `false`.
 
 
+### Check if a range contains another range
+
+All the range types offer a `containsRange` method: you can call them to check if an address range fully contains another range:
+
+```php
+$range1 = \IPLib\Factory::rangeFromString('0:0::1/64');
+$range2 = \IPLib\Factory::rangeFromString('0:0::1/65');
+$contained = $range1->containsRange($range2);
+```
+
+
 ### Getting the type of an IP address
 
 If you want to know if an address is within a private network, or if it's a public IP, or whatever you want, you can use the `getRangeType` method:
@@ -194,7 +205,30 @@ The most notable values of the range type ID are:
 - `\IPLib\Range\Type::T_PRIVATENETWORK` if the address is in the local network (for instance `192.168.0.1` or `fc00::1`)
 - `\IPLib\Range\Type::T_PUBLIC` if the address is for public usage (for instance `104.25.25.33` or `2001:503:ba3e::2:30`)
 
- 
+
+### Getting the type of an IP address range
+
+If you want to know the type of an address range, you can use the `getRangeType` method:
+
+```php
+$range = \IPLib\Factory::rangeFromString('2000:0::1/64');
+$type = $range->getRangeType();
+// $type is \IPLib\Range\Type::T_PUBLIC
+echo \IPLib\Range\Type::getName($type);
+// 'Public address'
+```
+
+Please remark that if a range spans across multiple range types, you'll get NULL as the range type:
+
+```php
+$range = \IPLib\Factory::rangeFromString('::/127');
+$type = $range->getRangeType();
+// $type is null
+echo \IPLib\Range\Type::getName($type);
+// 'Unknown type'
+```
+
+
 ### Using a database
 
 This package offers a great feature: you can store address ranges in a database table, and check if an address is contained in one of the saved ranges with a simple query.
