@@ -5,6 +5,9 @@ namespace IPLib\Range;
 use IPLib\Address\AddressInterface;
 use IPLib\Address\IPv4;
 use IPLib\Address\IPv6;
+use IPLib\Address\Type as AddressType;
+use IPLib\Factory;
+use IPLib\Range\Type as RangeType;
 
 /**
  * Represents an address range in pattern format (only ending asterisks are supported).
@@ -34,6 +37,13 @@ class Pattern implements RangeInterface
      * @var int
      */
     protected $asterisksCount;
+
+    /**
+     * The type of the range of this IP range.
+     *
+     * @var int|null
+     */
+    protected $rangeType;
 
     /**
      * Initializes the instance.
@@ -146,17 +156,92 @@ class Pattern implements RangeInterface
     /**
      * {@inheritdoc}
      *
+     * @see RangeInterface::getRangeType()
+     */
+    public function getRangeType()
+    {
+        if ($this->rangeType === null) {
+            switch ($this->getAddressType()) {
+                case AddressType::T_IPv4:
+                    // Default is public
+                    $this->rangeType = RangeType::T_PUBLIC;
+                    $reservedRanges = IPv4::getReservedRanges();
+                    break;
+                case AddressType::T_IPv6:
+                    if (Subnet::fromString('2002::/16')->containsRange($this)) {
+                        $this->rangeType = Factory::rangeFromBoundaries($this->fromAddress->toIPv4(), $this->toAddress->toIPv4())->getRangeType();
+
+                        return $this->rangeType;
+                    } else {
+                        // Default is public
+                        $this->rangeType = RangeType::T_RESERVED;
+                        $reservedRanges = IPv6::getReservedRanges();
+                    }
+                    break;
+            }
+
+            // Check if range is contained within an RFC subnet
+            foreach ($reservedRanges as $reservedRange) {
+                if ($reservedRange['range']->containsRange($this)) {
+                    $this->rangeType = $reservedRange['type'];
+                    break;
+                }
+            }
+
+            // Check if public/reserved range contains an RFC subnet
+            if ($this->rangeType === RangeType::T_PUBLIC || $this->rangeType === RangeType::T_RESERVED) {
+                foreach ($reservedRanges as $reservedRange) {
+                    if ($this->containsRange($reservedRange['range'])) {
+                        if ($this->rangeType !== $reservedRange['type']) {
+                            // RFC 5735 specifies that 255.255.255.255/32 is excluded from 240.0.0.0/4 and 224.0.0.0/4
+                            if ($this->getAddressType() === AddressType::T_IPv4 &&
+                                ($reservedRange['type'] === RangeType::T_LIMITEDBROADCAST ||
+                                 $reservedRange['type'] === RangeType::T_UNSPECIFIED)) {
+                                continue;
+                            }
+
+                            // :: unspecified exists within ::/8 reserved
+                            // ::1/128 loopback exists within ::/8 reserved
+                            if ($this->getAddressType() === AddressType::T_IPv6 &&
+                                ($reservedRange['type'] === RangeType::T_UNSPECIFIED ||
+                                 $reservedRange['type'] === RangeType::T_LOOPBACK)) {
+                                continue;
+                            }
+                            $this->rangeType = null;
+                        }
+                    }
+                }
+            }
+        }
+
+        return $this->rangeType;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
      * @see RangeInterface::contains()
      */
     public function contains(AddressInterface $address)
     {
+        return $this->containsRange(Single::fromAddress($address));
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @see RangeInterface::containsRange()
+     */
+    public function containsRange(RangeInterface $range)
+    {
         $result = false;
-        if ($address->getAddressType() === $this->getAddressType()) {
-            $cmp = $address->getComparableString();
+        if ($range->getAddressType() === $this->getAddressType()) {
+            $cmpLower = $range->getComparableStartString();
+            $cmpHigher = $range->getComparableEndString();
             $from = $this->getComparableStartString();
-            if (strcmp($cmp, $from) >= 0) {
+            if (strcmp($cmpLower, $from) >= 0) {
                 $to = $this->getComparableEndString();
-                if (strcmp($cmp, $to) <= 0) {
+                if (strcmp($cmpHigher, $to) <= 0) {
                     $result = true;
                 }
             }
