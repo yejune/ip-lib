@@ -4,8 +4,9 @@ namespace IPLib\Test\Ranges;
 
 use IPLib\Factory;
 use IPLib\Range\Subnet;
+use PHPUnit\Framework\TestCase;
 
-class SubnetTest extends \PHPUnit_Framework_TestCase
+class SubnetTest extends TestCase
 {
     public function invalidProvider()
     {

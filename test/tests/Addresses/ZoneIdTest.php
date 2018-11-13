@@ -3,9 +3,9 @@
 namespace IPLib\Test\Addresses;
 
 use IPLib\Factory;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class ZoneIdTest extends PHPUnit_Framework_TestCase
+class ZoneIdTest extends TestCase
 {
     public function validAddresses()
     {
