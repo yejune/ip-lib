@@ -3,8 +3,9 @@
 namespace IPLib\Test\Addresses;
 
 use IPLib\Factory;
+use PHPUnit\Framework\TestCase;
 
-class ValidTest extends \PHPUnit_Framework_TestCase
+class ValidTest extends TestCase
 {
     public function validAddressesProvider()
     {

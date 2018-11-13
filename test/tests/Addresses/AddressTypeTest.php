@@ -4,9 +4,9 @@ namespace IPLib\Test\Addresses;
 
 use IPLib\Factory;
 use IPLib\Address\Type;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class AddressTypeTest extends PHPUnit_Framework_TestCase
+class AddressTypeTest extends TestCase
 {
     public function ipProvider()
     {

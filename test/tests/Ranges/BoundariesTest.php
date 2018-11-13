@@ -3,8 +3,9 @@
 namespace IPLib\Test\Ranges;
 
 use IPLib\Factory;
+use PHPUnit\Framework\TestCase;
 
-class BoundariesTest extends \PHPUnit_Framework_TestCase
+class BoundariesTest extends TestCase
 {
     public function boundariesProvider()
     {

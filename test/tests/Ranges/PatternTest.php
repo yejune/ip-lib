@@ -4,8 +4,9 @@ namespace IPLib\Test\Ranges;
 
 use IPLib\Factory;
 use IPLib\Range\Pattern;
+use PHPUnit\Framework\TestCase;
 
-class PatternTest extends \PHPUnit_Framework_TestCase
+class PatternTest extends TestCase
 {
     public function invalidProvider()
     {

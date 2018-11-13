@@ -3,9 +3,9 @@
 namespace IPLib\Test\Ranges;
 
 use IPLib\Factory;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class FromBoundariesTest extends PHPUnit_Framework_TestCase
+class FromBoundariesTest extends TestCase
 {
     public function invalidProvider()
     {

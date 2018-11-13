@@ -4,8 +4,9 @@ namespace IPLib\Test\Ranges;
 
 use IPLib\Factory;
 use IPLib\Range\Single;
+use PHPUnit\Framework\TestCase;
 
-class SingleTest extends \PHPUnit_Framework_TestCase
+class SingleTest extends TestCase
 {
     public function invalidProvider()
     {

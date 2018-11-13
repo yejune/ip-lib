@@ -3,8 +3,9 @@
 namespace IPLib\Test\Addresses;
 
 use IPLib\Factory;
+use PHPUnit\Framework\TestCase;
 
-class PreviousNextTest extends \PHPUnit_Framework_TestCase
+class PreviousNextTest extends TestCase
 {
     public function previousNextProvider()
     {

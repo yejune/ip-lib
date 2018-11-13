@@ -3,8 +3,9 @@
 namespace IPLib\Test\Addresses;
 
 use IPLib\Factory;
+use PHPUnit\Framework\TestCase;
 
-class ConversionTest extends \PHPUnit_Framework_TestCase
+class ConversionTest extends TestCase
 {
     public function validAddressesProvider()
     {

@@ -2,10 +2,10 @@
 
 namespace IPLib\Test\Addresses;
 
-use PHPUnit_Framework_TestCase;
 use IPLib\Factory;
+use PHPUnit\Framework\TestCase;
 
-class IPv4MappedIPv6Test extends PHPUnit_Framework_TestCase
+class IPv4MappedIPv6Test extends TestCase
 {
     public function mappedAddressProvider()
     {
