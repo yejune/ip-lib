@@ -1,51 +1,94 @@
 sudo: false
-
+dist: trusty
 language: php
-
-notifications:
-  email: false
-
 branches:
   only:
   - master
-
 cache:
   directories:
   - $HOME/.composer/cache
-
-php:
-- 5.4
-- 5.5
-- 5.6
-- 7.0
-- 7.2
-- 7.3
-- hhvm
-- nightly
-
-env:
-  global:
-  - GET_COVERAGE=0
+notifications:
+  email: false
 
 matrix:
-  include:
-  - php: 5.3
-    dist: precise
-  - php: 7.1
-    env:
-    - GET_COVERAGE=1
+  fast_finish: true
   allow_failures:
-  - php: nightly
+  - name: Test with PHP Nightly
+  include:
 
-before_script:
-- ./.travis/configure.sh
-- travis_retry composer --no-interaction install
+  - name: Test with PHP 5.3
+    dist: precise
+    php: '5.3'
+    before_script:
+    - phpenv config-rm xdebug.ini || true
+    - travis_retry composer --no-interaction install
+    script:
+    - composer --no-interaction run-script test
 
-script:
-- |
-  CMD='composer --no-interaction run-script test --'
-  if test $GET_COVERAGE -eq 1; then CMD="$CMD --coverage-clover coverage-clover.xml"; fi
-  $CMD
+  - name: Test with PHP 5.4
+    php: '5.4'
+    before_script:
+    - phpenv config-rm xdebug.ini || true
+    - travis_retry composer --no-interaction install
+    script:
+    - composer --no-interaction run-script test
 
-after_script:
-- ./.travis/after-success.sh
+  - name: Test with PHP 5.5
+    php: '5.5'
+    before_script:
+    - phpenv config-rm xdebug.ini || true
+    - travis_retry composer --no-interaction install
+    script:
+    - composer --no-interaction run-script test
+
+  - name: Test with PHP 5.6
+    php: '5.6'
+    before_script:
+    - phpenv config-rm xdebug.ini || true
+    - travis_retry composer --no-interaction install
+    script:
+    - composer --no-interaction run-script test
+
+  - name: Test with PHP 7.0
+    php: '7.0'
+    before_script:
+    - phpenv config-rm xdebug.ini || true
+    - travis_retry composer --no-interaction install
+    script:
+    - composer --no-interaction run-script test
+
+  - name: Test with PHP 7.1 (with code coverage)
+    php: '7.1'
+    before_script:
+    - curl --location --output ocular.phar --retry 3 --silent --show-error https://scrutinizer-ci.com/ocular.phar
+    - composer --no-interaction require --dev --no-suggest --no-update 'php-coveralls/php-coveralls:^2.0'
+    - travis_retry composer --no-interaction install
+    script:
+    - composer --no-interaction run-script test -- --coverage-clover coverage-clover.xml
+    after_script:
+    - ./vendor/bin/php-coveralls --no-interaction --coverage_clover=coverage-clover.xml --json_path=coveralls-upload.json
+    - php ocular.phar code-coverage:upload --format=php-clover coverage-clover.xml
+
+  - name: Test with PHP 7.2
+    php: '7.2'
+    before_script:
+    - phpenv config-rm xdebug.ini || true
+    - travis_retry composer --no-interaction install
+    script:
+    - composer --no-interaction run-script test
+
+  - name: Test with PHP 7.3
+    php: '7.3'
+    before_script:
+    - phpenv config-rm xdebug.ini || true
+    - travis_retry composer --no-interaction install
+    script:
+    - composer --no-interaction run-script test
+
+  - name: Test with PHP Nightly
+    php: nightly
+    before_script:
+    - phpenv config-rm xdebug.ini || true
+    - travis_retry composer --no-interaction install
+    script:
+    - composer --no-interaction run-script test
