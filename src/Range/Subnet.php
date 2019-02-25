@@ -278,4 +278,14 @@ class Subnet implements RangeInterface
 
         return self::$sixToFour;
     }
+
+    /**
+     * Get subnet prefix.
+     *
+     * @return int
+     */
+    public function getNetworkPrefix()
+    {
+        return $this->networkPrefix;
+    }
 }
