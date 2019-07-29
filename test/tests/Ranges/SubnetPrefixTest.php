@@ -2,7 +2,7 @@
 
 namespace IPLib\Test\Ranges;
 
-use IPLib\Range\Subnet;
+use IPLib\Factory;
 use IPLib\Test\TestCase;
 
 class SubnetPrefixTest extends TestCase
@@ -11,14 +11,14 @@ class SubnetPrefixTest extends TestCase
     {
         $tests = array();
 
-        // IPv4.
+        // IPv4
         for ($i = 0; $i <= 32; $i++) {
-            $test[] = array('0.0.0.0/'.$i, $i);
+            $tests[] = array('0.0.0.0/'.$i, $i);
         }
 
-        // IPv6.
+        // IPv6
         for ($i = 0; $i <= 128; $i++) {
-            $test[] = array('0000:0000:0000:0000:0000:0000:0000:0000/128/'.$i, $i);
+            $tests[] = array('0000:0000:0000:0000:0000:0000:0000:0000/'.$i, $i);
         }
 
         return $tests;
@@ -30,8 +30,8 @@ class SubnetPrefixTest extends TestCase
     public function testSubnetPrefix($rangeString, $expectedPrefix)
     {
         $range = Factory::rangeFromString($rangeString);
-        $this->assertNotNull($range, "'$rangeString' has been detected as an invalid subnet, but it should be valid");
-        $detectedPrefix = $range->getSubnetPrefix();
-        $this->assertSame($expectedPrefix, $detectedPrefix, sprintf("'%s' has been detected prefix as\n%s\ninstead of\n%s", $detectedPrefix, $expectedPrefix));
+        $this->assertNotNull($range, "'{$rangeString}' has been detected as an invalid subnet, but it should be valid");
+        $detectedPrefix = $range->getNetworkPrefix();
+        $this->assertSame($expectedPrefix, $detectedPrefix, "'{$rangeString}' has been detected prefix as\n{$detectedPrefix}\ninstead of\n{$expectedPrefix}");
     }
 }
