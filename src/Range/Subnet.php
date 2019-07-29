@@ -57,8 +57,10 @@ class Subnet implements RangeInterface
      * @param \IPLib\Address\AddressInterface $fromAddress
      * @param \IPLib\Address\AddressInterface $toAddress
      * @param int $networkPrefix
+     *
+     * @internal
      */
-    protected function __construct(AddressInterface $fromAddress, AddressInterface $toAddress, $networkPrefix)
+    public function __construct(AddressInterface $fromAddress, AddressInterface $toAddress, $networkPrefix)
     {
         $this->fromAddress = $fromAddress;
         $this->toAddress = $toAddress;
@@ -287,5 +289,22 @@ class Subnet implements RangeInterface
     public function getNetworkPrefix()
     {
         return $this->networkPrefix;
+    }
+
+    /**
+     * Get the pattern representation (if applicable) of this range.
+     *
+     * @return \IPLib\Range\Pattern|null return NULL if this range can't be represented by a pattern notation
+     */
+    public function asPattern()
+    {
+        $address = $this->getStartAddress();
+        $networkPrefix = $this->getNetworkPrefix();
+        switch ($address->getAddressType()) {
+            case AddressType::T_IPv4:
+                return $networkPrefix % 8 === 0 ? new Pattern($address, $address, 4 - $networkPrefix / 8) : null;
+            case AddressType::T_IPv6:
+                return $networkPrefix % 16 === 0 ? new Pattern($address, $address, 8 - $networkPrefix / 16) : null;
+        }
     }
 }
