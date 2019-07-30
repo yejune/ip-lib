@@ -12,6 +12,7 @@ disabled:
   - align_phpdoc
   - post_increment
   - phpdoc_align
+  - simplified_null_return
   # Because problems with PHP 5.3.* and PHP 5.4.0 - see https://3v4l.org/imgo9
   - self_accessor
 
