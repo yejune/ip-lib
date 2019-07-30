@@ -3,6 +3,8 @@
 namespace IPLib\Range;
 
 use IPLib\Address\AddressInterface;
+use IPLib\Address\IPv4;
+use IPLib\Address\Type as AddressType;
 use IPLib\Factory;
 
 /**
@@ -170,5 +172,19 @@ class Single implements RangeInterface
     public function getComparableEndString()
     {
         return $this->address->getComparableString();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @see \IPLib\Range\RangeInterface::getSubnetMask()
+     */
+    public function getSubnetMask()
+    {
+        if ($this->getAddressType() !== AddressType::T_IPv4) {
+            return null;
+        }
+
+        return IPv4::fromBytes(array(255, 255, 255, 255));
     }
 }

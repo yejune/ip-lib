@@ -86,4 +86,11 @@ interface RangeInterface
      * @return string
      */
     public function getComparableEndString();
+
+    /**
+     * Get the subnet mask representing this range (only for IPv4 ranges).
+     *
+     * @return \IPLib\Address\IPv4|null return NULL if the range is an IPv6 range, the subnet mask otherwise
+     */
+    public function getSubnetMask();
 }

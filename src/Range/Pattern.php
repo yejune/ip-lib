@@ -303,4 +303,29 @@ class Pattern implements RangeInterface
                 return new Subnet($this->getStartAddress(), $this->getEndAddress(), 16 * (8 - $this->asterisksCount));
         }
     }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @see \IPLib\Range\RangeInterface::getSubnetMask()
+     */
+    public function getSubnetMask()
+    {
+        if ($this->getAddressType() !== AddressType::T_IPv4) {
+            return null;
+        }
+        switch ($this->asterisksCount) {
+            case 0:
+                $bytes = array(255, 255, 255, 255);
+                break;
+            case 4:
+                $bytes = array(0, 0, 0, 0);
+                break;
+            default:
+                $bytes = array_pad(array_fill(0, 4 - $this->asterisksCount, 255), 4, 0);
+                break;
+        }
+
+        return IPv4::fromBytes($bytes);
+    }
 }
