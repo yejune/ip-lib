@@ -229,6 +229,35 @@ echo \IPLib\Range\Type::getName($type);
 // 'Unknown type'
 ```
 
+### Converting IP ranges
+
+This library supports IPv4/IPv6 ranges in pattern format (eg. `192.168.*.*`) and in CIDR/subnet format (eg. `192.168.0.0/16`), and it offers a way to convert between the two formats:
+
+```php
+// This will print ::*:*:*:*
+echo \IPLib\Factory::rangeFromString('::/64')->asPattern()->toString();
+
+// This will print 1:2::/96
+echo \IPLib\Factory::rangeFromString('1:2::*:*')->asSubnet()->toString();
+
+// This will print 192.168.0.0/24
+echo \IPLib\Factory::rangeFromString('192.168.0.*')->asSubnet()->toString();
+
+// This will print 10.*.*.*
+echo \IPLib\Factory::rangeFromString('10.0.0.0/8')->asPattern()->toString();
+```
+
+### Getting the subnet mask for IPv4 ranges
+
+You can use the `getSubnetMask()` to get the subnet mask for IPv4 ranges:
+
+```php
+// This will print 255.255.255.0
+echo \IPLib\Factory::rangeFromString('192.168.0.*')->getSubnetMask()->toString();
+
+// This will print 255.255.255.252
+echo \IPLib\Factory::rangeFromString('192.168.0.12/30')->getSubnetMask()->toString();
+```
 
 ### Using a database
 
