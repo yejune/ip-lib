@@ -307,4 +307,28 @@ class Subnet implements RangeInterface
                 return $networkPrefix % 16 === 0 ? new Pattern($address, $address, 8 - $networkPrefix / 16) : null;
         }
     }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @see \IPLib\Range\RangeInterface::getSubnetMask()
+     */
+    public function getSubnetMask()
+    {
+        if ($this->getAddressType() !== AddressType::T_IPv4) {
+            return null;
+        }
+        $bytes = array();
+        $prefix = $this->getNetworkPrefix();
+        while ($prefix >= 8) {
+            $bytes[] = 255;
+            $prefix -= 8;
+        }
+        if ($prefix !== 0) {
+            $bytes[] = bindec(str_pad(str_repeat('1', $prefix), 8, '0'));
+        }
+        $bytes = array_pad($bytes, 4, 0);
+
+        return IPv4::fromBytes($bytes);
+    }
 }

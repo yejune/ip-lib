@@ -13,6 +13,7 @@ notifications:
 matrix:
   fast_finish: true
   allow_failures:
+  - name: Test with PHP 7.4
   - name: Test with PHP Nightly
   include:
 
@@ -79,6 +80,14 @@ matrix:
 
   - name: Test with PHP 7.3
     php: '7.3'
+    before_script:
+    - phpenv config-rm xdebug.ini || true
+    - travis_retry composer --no-interaction install
+    script:
+    - composer --no-interaction run-script test
+
+  - name: Test with PHP 7.4
+    php: '7.4snapshot'
     before_script:
     - phpenv config-rm xdebug.ini || true
     - travis_retry composer --no-interaction install
