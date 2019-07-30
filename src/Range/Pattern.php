@@ -112,6 +112,9 @@ class Pattern implements RangeInterface
      */
     public function toString($long = false)
     {
+        if ($this->asterisksCount === 0) {
+            return $this->fromAddress->toString($long);
+        }
         switch (true) {
             case $this->fromAddress instanceof \IPLib\Address\IPv4:
                 $chunks = explode('.', $this->fromAddress->toString());
@@ -125,12 +128,15 @@ class Pattern implements RangeInterface
                     $chunks = array_slice($chunks, 0, -$this->asterisksCount);
                     $chunks = array_pad($chunks, 8, '*');
                     $result = implode(':', $chunks);
+                } elseif ($this->asterisksCount === 8) {
+                    $result = '*:*:*:*:*:*:*:*';
                 } else {
-                    $chunks = explode(':', $this->toAddress->toString(false));
-                    $chunkCount = count($chunks);
-                    $chunks = array_slice($chunks, 0, -$this->asterisksCount);
-                    $chunks = array_pad($chunks, $chunkCount, '*');
-                    $result = implode(':', $chunks);
+                    $bytes = $this->toAddress->getBytes();
+                    $bytes = array_slice($bytes, 0, -$this->asterisksCount * 2);
+                    $bytes = array_pad($bytes, 16, 1);
+                    $address = IPv6::fromBytes($bytes);
+                    $before = substr($address->toString(false), 0, -strlen(':101') * $this->asterisksCount);
+                    $result = $before.str_repeat(':*', $this->asterisksCount);
                 }
                 break;
             default:
@@ -281,5 +287,20 @@ class Pattern implements RangeInterface
     public function getComparableEndString()
     {
         return $this->toAddress->getComparableString();
+    }
+
+    /**
+     * Get the subnet/CIDR representation of this range.
+     *
+     * @return \IPLib\Range\Subnet
+     */
+    public function asSubnet()
+    {
+        switch ($this->getAddressType()) {
+            case AddressType::T_IPv4:
+                return new Subnet($this->getStartAddress(), $this->getEndAddress(), 8 * (4 - $this->asterisksCount));
+            case AddressType::T_IPv6:
+                return new Subnet($this->getStartAddress(), $this->getEndAddress(), 16 * (8 - $this->asterisksCount));
+        }
     }
 }
