@@ -1,5 +1,4 @@
 sudo: false
-dist: trusty
 language: php
 branches:
   only:
@@ -27,6 +26,7 @@ matrix:
     - composer --no-interaction run-script test
 
   - name: Test with PHP 5.4
+    dist: trusty
     php: '5.4'
     before_script:
     - phpenv config-rm xdebug.ini || true
@@ -35,6 +35,7 @@ matrix:
     - composer --no-interaction run-script test
 
   - name: Test with PHP 5.5
+    dist: trusty
     php: '5.5'
     before_script:
     - phpenv config-rm xdebug.ini || true
@@ -98,6 +99,7 @@ matrix:
     php: nightly
     before_script:
     - phpenv config-rm xdebug.ini || true
+    - composer --no-interaction config platform.php 7.4.0
     - travis_retry composer --no-interaction install
     script:
     - composer --no-interaction run-script test
