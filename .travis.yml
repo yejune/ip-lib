@@ -98,6 +98,7 @@ matrix:
     php: nightly
     before_script:
     - phpenv config-rm xdebug.ini || true
+    - composer --no-interaction config platform.php 7.4.0
     - travis_retry composer --no-interaction install
     script:
     - composer --no-interaction run-script test
