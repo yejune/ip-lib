@@ -25,6 +25,10 @@ class BoundariesTest extends TestCase
 
     /**
      * @dataProvider boundariesProvider
+     *
+     * @param string $rangeString
+     * @param string $startAddressString
+     * @param string $endAddressString
      */
     public function testBoundaries($rangeString, $startAddressString, $endAddressString)
     {

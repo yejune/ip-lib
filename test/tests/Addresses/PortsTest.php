@@ -19,14 +19,17 @@ class PortsTest extends TestCase
 
     /**
      * @dataProvider validAddresses
+     *
+     * @param string $address
+     * @param bool $hasPort
      */
     public function testValidAddresses($address, $hasPort)
     {
         $ip = Factory::addressFromString($address);
-        $this->assertNotNull($ip, "'$address' has been detected as an invalid IP, but it should be valid");
+        $this->assertNotNull($ip, "'{$address}' has been detected as an invalid IP, but it should be valid");
         if ($hasPort) {
             $ip = Factory::addressFromString($address, false);
-            $this->assertNull($ip, "'$address' has a port, but we disabled parsing addresses with ports");
+            $this->assertNull($ip, "'{$address}' has a port, but we disabled parsing addresses with ports");
         }
     }
 
@@ -42,10 +45,12 @@ class PortsTest extends TestCase
 
     /**
      * @dataProvider invalidAddresses
+     *
+     * @param string $address
      */
     public function testInvalidAddresses($address)
     {
         $ip = Factory::addressFromString($address);
-        $this->assertNull($ip, "'$address' has been detected as valid IP, but it should be NOT valid");
+        $this->assertNull($ip, "'{$address}' has been detected as valid IP, but it should be NOT valid");
     }
 }

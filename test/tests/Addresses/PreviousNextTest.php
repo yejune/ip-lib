@@ -32,6 +32,10 @@ class PreviousNextTest extends TestCase
 
     /**
      * @dataProvider previousNextProvider
+     *
+     * @param string $addressString
+     * @param string $previousString
+     * @param string $nextString
      */
     public function testPreviousNext($addressString, $previousString, $nextString)
     {

@@ -273,11 +273,14 @@ class RangeTypeTest extends TestCase
 
     /**
      * @dataProvider ipProvider
+     *
+     * @param string $address
+     * @param int $expectedType
      */
     public function testRangeTypes($address, $expectedType)
     {
         $ip = Factory::addressFromString($address);
-        $this->assertNotNull($ip, "'$address' has been detected as an invalid IP, but it should be valid");
+        $this->assertNotNull($ip, "'{$address}' has been detected as an invalid IP, but it should be valid");
         $detectedType = $ip->getRangeType();
         $this->assertSame($expectedType, $detectedType, sprintf("'%s' has been detected as\n%s\ninstead of\n%s", $ip->toString(), Type::getName($detectedType), Type::getName($expectedType)));
     }
@@ -293,6 +296,9 @@ class RangeTypeTest extends TestCase
 
     /**
      * @dataProvider rangeTypeNameProvider
+     *
+     * @param int|mixed $type
+     * @param string $expectedName
      */
     public function testRangeTypeName($type, $expectedName)
     {

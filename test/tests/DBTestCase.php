@@ -2,8 +2,8 @@
 
 namespace IPLib\Test;
 
-use PHPUnit\DbUnit\TestCase as PHPUnitTestCase;
 use PDO;
+use PHPUnit\DbUnit\TestCase as PHPUnitTestCase;
 
 abstract class DBTestCase extends PHPUnitTestCase
 {
@@ -15,7 +15,7 @@ abstract class DBTestCase extends PHPUnitTestCase
     /**
      * @var \PHPUnit\DbUnit\Database\Connection|null
      */
-    private $connection = null;
+    private $connection;
 
     /**
      * {@inheritdoc}
@@ -53,6 +53,6 @@ abstract class DBTestCase extends PHPUnitTestCase
      */
     public function getDataSet()
     {
-        return $this->createXMLDataSet(__DIR__.'/dataset.xml');
+        return $this->createXMLDataSet(__DIR__ . '/dataset.xml');
     }
 }

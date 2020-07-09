@@ -27,11 +27,12 @@ class SubnetTest extends TestCase
 
     /**
      * @dataProvider invalidProvider
+     *
+     * @param string|mixed $range
      */
     public function testInvalid($range)
     {
-        $str = @strval($range);
-        $this->assertNull(Subnet::fromString($range), "'$str' has been recognized as a subnet range, but it shouldn't");
+        $this->assertNull(Subnet::fromString($range), json_encode($range) . " has been recognized as a subnet range, but it shouldn't");
     }
 
     public function validProvider()
@@ -46,13 +47,16 @@ class SubnetTest extends TestCase
 
     /**
      * @dataProvider validProvider
+     *
+     * @param string $range
+     * @param string $short
+     * @param string $long
      */
     public function testValid($range, $short, $long)
     {
-        $str = @strval($range);
         $ex = Factory::rangeFromString($range);
-        $this->assertNotNull($ex, "'$str' has not been recognized as a range, but it should");
-        $this->assertInstanceOf('IPLib\Range\Subnet', $ex, "'$str' has been recognized as a range, but not a subnet range");
+        $this->assertNotNull($ex, "'{$range}' has not been recognized as a range, but it should");
+        $this->assertInstanceOf('IPLib\Range\Subnet', $ex, "'{$range}' has been recognized as a range, but not a subnet range");
         $this->assertSame($short, $ex->toString(false));
         $this->assertSame($long, $ex->toString(true));
     }

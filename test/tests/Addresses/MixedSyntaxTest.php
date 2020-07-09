@@ -66,6 +66,13 @@ class MixedSyntaxTest extends TestCase
 
     /**
      * @dataProvider validMixedSyntaxProvider
+     *
+     * @param string $mixedRepresentation
+     * @param string $expectedShortIPv6Representation
+     * @param string $normalizedMixedRepresentationSS
+     * @param string $normalizedMixedRepresentationLS
+     * @param string $normalizedMixedRepresentationSL
+     * @param string $normalizedMixedRepresentationLL
      */
     public function testValidMixedSyntax($mixedRepresentation, $expectedShortIPv6Representation, $normalizedMixedRepresentationSS, $normalizedMixedRepresentationLS, $normalizedMixedRepresentationSL, $normalizedMixedRepresentationLL)
     {
@@ -92,6 +99,8 @@ class MixedSyntaxTest extends TestCase
 
     /**
      * @dataProvider invalidMixedSyntaxProvider
+     *
+     * @param string $mixedRepresentation
      */
     public function testInalidMixedSyntax($mixedRepresentation)
     {

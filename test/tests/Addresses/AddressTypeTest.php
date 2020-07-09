@@ -2,8 +2,8 @@
 
 namespace IPLib\Test\Addresses;
 
-use IPLib\Factory;
 use IPLib\Address\Type;
+use IPLib\Factory;
 use IPLib\Test\TestCase;
 
 class AddressTypeTest extends TestCase
@@ -268,11 +268,14 @@ class AddressTypeTest extends TestCase
 
     /**
      * @dataProvider ipProvider
+     *
+     * @param string $address
+     * @param int $expectedType
      */
     public function testAddressTypes($address, $expectedType)
     {
         $ip = Factory::addressFromString($address);
-        $this->assertNotNull($ip, "'$address' has been detected as an invalid IP, but it should be valid");
+        $this->assertNotNull($ip, "'{$address}' has been detected as an invalid IP, but it should be valid");
         $detectedType = $ip->getAddressType();
         $this->assertSame($expectedType, $detectedType, sprintf("'%s' has been detected as\n%s\ninstead of\n%s", $ip->toString(), Type::getName($detectedType), Type::getName($expectedType)));
     }
@@ -288,6 +291,9 @@ class AddressTypeTest extends TestCase
 
     /**
      * @dataProvider addressTypeNameProvider
+     *
+     * @param int|mixed $type
+     * @param string $expectedName
      */
     public function testAddressTypeName($type, $expectedName)
     {

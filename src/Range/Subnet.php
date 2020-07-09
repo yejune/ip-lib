@@ -68,10 +68,20 @@ class Subnet implements RangeInterface
     }
 
     /**
+     * {@inheritdoc}
+     *
+     * @see \IPLib\Range\RangeInterface::__toString()
+     */
+    public function __toString()
+    {
+        return $this->toString();
+    }
+
+    /**
      * Try get the range instance starting from its string representation.
      *
      * @param string|mixed $range
-     * @param bool $supportNonDecimalIPv4 set to true to support parsing non decimal (that is, octal and hexadecimal) IPv4 addresses.
+     * @param bool $supportNonDecimalIPv4 set to true to support parsing non decimal (that is, octal and hexadecimal) IPv4 addresses
      *
      * @return static|null
      */
@@ -123,17 +133,7 @@ class Subnet implements RangeInterface
      */
     public function toString($long = false)
     {
-        return $this->fromAddress->toString($long).'/'.$this->networkPrefix;
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @see \IPLib\Range\RangeInterface::__toString()
-     */
-    public function __toString()
-    {
-        return $this->toString();
+        return $this->fromAddress->toString($long) . '/' . $this->networkPrefix;
     }
 
     /**

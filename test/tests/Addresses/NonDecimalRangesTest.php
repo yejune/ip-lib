@@ -48,12 +48,13 @@ class NonDecimalRangesTest extends TestCase
      * @dataProvider casesProvider
      *
      * @param string $input
+     * @param bool $parseNonDecimal
      * @param string|null $expectedStringRepresentation
      */
     public function testCases($input, $parseNonDecimal, $expectedStringRepresentation = null)
     {
         $range = Factory::rangeFromString($input, $parseNonDecimal);
-        if (null === $expectedStringRepresentation) {
+        if ($expectedStringRepresentation === null) {
             $this->assertNull($range);
         } else {
             $this->assertInstanceOf('\IPLib\Range\RangeInterface', $range);

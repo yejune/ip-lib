@@ -15,7 +15,7 @@ class Factory
      * @param string $address the address to parse
      * @param bool $mayIncludePort set to false to avoid parsing addresses with ports
      * @param bool $mayIncludeZoneID set to false to avoid parsing IPv6 addresses with zone IDs (see RFC 4007)
-     * @param bool $supportNonDecimalIPv4 set to true to support parsing non decimal (that is, octal and hexadecimal) IPv4 addresses.
+     * @param bool $supportNonDecimalIPv4 set to true to support parsing non decimal (that is, octal and hexadecimal) IPv4 addresses
      *
      * @return \IPLib\Address\AddressInterface|null
      */
@@ -56,7 +56,7 @@ class Factory
      * Parse an IP range string.
      *
      * @param string $range
-     * @param bool $supportNonDecimalIPv4 set to true to support parsing non decimal (that is, octal and hexadecimal) IPv4 addresses.
+     * @param bool $supportNonDecimalIPv4 set to true to support parsing non decimal (that is, octal and hexadecimal) IPv4 addresses
      *
      * @return \IPLib\Range\RangeInterface|null
      */
@@ -81,7 +81,7 @@ class Factory
      *
      * @param string|\IPLib\Address\AddressInterface $from
      * @param string|\IPLib\Address\AddressInterface $to
-     * @param bool $supportNonDecimalIPv4 set to true to support parsing non decimal (that is, octal and hexadecimal) IPv4 addresses.
+     * @param bool $supportNonDecimalIPv4 set to true to support parsing non decimal (that is, octal and hexadecimal) IPv4 addresses
      *
      * @return \IPLib\Range\RangeInterface|null
      */
@@ -138,7 +138,7 @@ class Factory
                     $toBytes = $to->getBytes();
                     $numBytes = count($fromBytes);
                     $sameBits = 0;
-                    for ($byteIndex = 0; $byteIndex < $numBytes; ++$byteIndex) {
+                    for ($byteIndex = 0; $byteIndex < $numBytes; $byteIndex++) {
                         $fromByte = $fromBytes[$byteIndex];
                         $toByte = $toBytes[$byteIndex];
                         if ($fromByte === $toByte) {
@@ -149,7 +149,7 @@ class Factory
                             break;
                         }
                     }
-                    $result = static::rangeFromString($from->toString(true).'/'.(string) $sameBits);
+                    $result = static::rangeFromString($from->toString(true) . '/' . (string) $sameBits);
                 }
             }
         }
