@@ -24,12 +24,15 @@ class ValidTest extends TestCase
 
     /**
      * @dataProvider validAddressesProvider
+     *
+     * @param string $address
+     * @param string $short
+     * @param string $long
      */
     public function testValidAddresses($address, $short, $long)
     {
-        $str = @strval($address);
         $ip = Factory::addressFromString($address);
-        $this->assertNotNull($ip, "'$str' has been detected as an invalid IP, but it should be valid");
+        $this->assertNotNull($ip, "'{$address}' has been detected as an invalid IP, but it should be valid");
         $this->assertSame($short, $ip->toString(false));
         $this->assertSame($short, $ip->__toString());
         $this->assertSame($long, $ip->toString(true));

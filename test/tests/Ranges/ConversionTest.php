@@ -73,6 +73,10 @@ class ConversionTest extends TestCase
 
     /**
      * @dataProvider rangeConversionProvider
+     *
+     * @param string $subnet
+     * @param string $pattern
+     * @param string|null $subnet2
      */
     public function testRangeConversion($subnet, $pattern, $subnet2 = null)
     {

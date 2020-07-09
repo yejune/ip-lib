@@ -42,6 +42,9 @@ class SubnetMaskTest extends TestCase
 
     /**
      * @dataProvider subnetMaskProvider
+     *
+     * @param string $rangeString
+     * @param string $subnetMaskString
      */
     public function testSubnetMask($rangeString, $subnetMaskString)
     {

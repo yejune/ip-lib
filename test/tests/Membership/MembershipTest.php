@@ -39,26 +39,27 @@ class MembershipTest extends DBTestCase
 
     /**
      * @dataProvider addressMembershipProvider
+     *
+     * @param string $address
+     * @param string $range
+     * @param bool $contained
      */
     public function testAddressMembership($address, $range, $contained)
     {
-        $addressStr = @strval($address);
-        $rangeStr = @strval($range);
-
         $addressObject = Factory::addressFromString($address);
-        $this->assertNotNull($addressObject, "'$addressStr' has not been recognized as an address");
+        $this->assertNotNull($addressObject, "'{$address}' has not been recognized as an address");
         $this->assertInstanceOf('IPLib\Address\AddressInterface', $addressObject);
 
         $rangeObject = Factory::rangeFromString($range);
-        $this->assertNotNull($rangeObject, "'$rangeStr' has not been recognized as a range");
+        $this->assertNotNull($rangeObject, "'{$range}' has not been recognized as a range");
         $this->assertInstanceOf('IPLib\Range\RangeInterface', $rangeObject);
 
         if ($contained) {
-            $this->assertSame(true, $rangeObject->contains($addressObject), "Failed to check that '$rangeStr' contains '$addressStr'");
-            $this->assertSame(true, $addressObject->matches($rangeObject), "Failed to check that '$addressStr' is contained in '$rangeStr'");
+            $this->assertSame(true, $rangeObject->contains($addressObject), "Failed to check that '{$range}' contains '{$address}'");
+            $this->assertSame(true, $addressObject->matches($rangeObject), "Failed to check that '{$address}' is contained in '{$range}'");
         } else {
-            $this->assertSame(false, $rangeObject->contains($addressObject), "Failed to check that '$rangeStr' does not contain '$addressStr'");
-            $this->assertSame(false, $addressObject->matches($rangeObject), "Failed to check that '$addressStr' is not contained in '$rangeStr'");
+            $this->assertSame(false, $rangeObject->contains($addressObject), "Failed to check that '{$range}' does not contain '{$address}'");
+            $this->assertSame(false, $addressObject->matches($rangeObject), "Failed to check that '{$address}' is not contained in '{$range}'");
         }
         $pdo = $this->getConnection()->getConnection();
         $insertQuery = $pdo->prepare('insert into ranges (rangeRepresentation, addressType, rangeFrom, rangeTo) values (:rangeRepresentation, :addressType, :rangeFrom, :rangeTo)');
@@ -76,9 +77,9 @@ class MembershipTest extends DBTestCase
         $foundRow = $searchQuery->fetch();
         $searchQuery->closeCursor();
         if ($contained) {
-            $this->assertNotEmpty($foundRow, "Failed to check that '$rangeStr' contains '$addressStr' using database comparison");
+            $this->assertNotEmpty($foundRow, "Failed to check that '{$range}' contains '{$address}' using database comparison");
         } else {
-            $this->assertFalse($foundRow, "Failed to check that '$rangeStr' does not contain '$addressStr' using database comparison");
+            $this->assertFalse($foundRow, "Failed to check that '{$range}' does not contain '{$address}' using database comparison");
         }
     }
 
@@ -102,13 +103,17 @@ class MembershipTest extends DBTestCase
 
     /**
      * @dataProvider rangeMembershipProvider
+     *
+     * @param string $rangeString
+     * @param string $otherRangeString
+     * @param bool $contained
      */
     public function testRangeMembership($rangeString, $otherRangeString, $contained)
     {
         $range = Factory::rangeFromString($rangeString);
-        $this->assertNotNull($range, "'$rangeString' has not been recognized as a range");
+        $this->assertNotNull($range, "'{$rangeString}' has not been recognized as a range");
         $otherRange = Factory::rangeFromString($otherRangeString);
-        $this->assertNotNull($range, "'$otherRangeString' has not been recognized as a range");
+        $this->assertNotNull($range, "'{$otherRangeString}' has not been recognized as a range");
         $this->assertSame(
             $contained,
             $range->containsRange($otherRange),

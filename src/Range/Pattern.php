@@ -40,7 +40,7 @@ class Pattern implements RangeInterface
     /**
      * The type of the range of this IP range.
      *
-     * @var int|null|false false if this range crosses multiple range types, null if yet to be determined
+     * @var int|false|null false if this range crosses multiple range types, null if yet to be determined
      */
     protected $rangeType;
 
@@ -59,10 +59,20 @@ class Pattern implements RangeInterface
     }
 
     /**
+     * {@inheritdoc}
+     *
+     * @see \IPLib\Range\RangeInterface::__toString()
+     */
+    public function __toString()
+    {
+        return $this->toString();
+    }
+
+    /**
      * Try get the range instance starting from its string representation.
      *
      * @param string|mixed $range
-     * @param bool $supportNonDecimalIPv4 set to true to support parsing non decimal (that is, octal and hexadecimal) IPv4 addresses.
+     * @param bool $supportNonDecimalIPv4 set to true to support parsing non decimal (that is, octal and hexadecimal) IPv4 addresses
      *
      * @return static|null
      */
@@ -144,7 +154,7 @@ class Pattern implements RangeInterface
                     $bytes = array_pad($bytes, 16, 1);
                     $address = IPv6::fromBytes($bytes);
                     $before = substr($address->toString(false), 0, -strlen(':101') * $this->asterisksCount);
-                    $result = $before.str_repeat(':*', $this->asterisksCount);
+                    $result = $before . str_repeat(':*', $this->asterisksCount);
                 }
                 break;
             default:
@@ -152,16 +162,6 @@ class Pattern implements RangeInterface
         }
 
         return $result;
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @see \IPLib\Range\RangeInterface::__toString()
-     */
-    public function __toString()
-    {
-        return $this->toString();
     }
 
     /**

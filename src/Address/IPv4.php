@@ -62,11 +62,21 @@ class IPv4 implements AddressInterface
     }
 
     /**
+     * {@inheritdoc}
+     *
+     * @see \IPLib\Address\AddressInterface::__toString()
+     */
+    public function __toString()
+    {
+        return $this->address;
+    }
+
+    /**
      * Parse a string and returns an IPv4 instance if the string is valid, or null otherwise.
      *
      * @param string|mixed $address the address to parse
      * @param bool $mayIncludePort set to false to avoid parsing addresses with ports
-     * @param bool $supportNonDecimalIPv4 set to true to support parsing non decimal (that is, octal and hexadecimal) IPv4 addresses.
+     * @param bool $supportNonDecimalIPv4 set to true to support parsing non decimal (that is, octal and hexadecimal) IPv4 addresses
      *
      * @return static|null
      */
@@ -84,11 +94,11 @@ class IPv4 implements AddressInterface
             $rx .= '(?::\d+)?';
         }
         $matches = null;
-        if (!preg_match('/^'.$rx.'$/', $address, $matches)) {
+        if (!preg_match('/^' . $rx . '$/', $address, $matches)) {
             return null;
         }
         $nums = array();
-        for ($i = 1; $i <= 4; ++$i) {
+        for ($i = 1; $i <= 4; $i++) {
             $s = $matches[$i];
             if ($supportNonDecimalIPv4) {
                 if (stripos($s, '0x') === 0) {
@@ -196,18 +206,8 @@ class IPv4 implements AddressInterface
                 $chunks[] = '0x' . dechex($byte);
             }
         }
-        
-        return implode('.', $chunks);
-    }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @see \IPLib\Address\AddressInterface::__toString()
-     */
-    public function __toString()
-    {
-        return $this->address;
+        return implode('.', $chunks);
     }
 
     /**
@@ -334,7 +334,7 @@ class IPv4 implements AddressInterface
     {
         $myBytes = $this->getBytes();
 
-        return IPv6::fromString('2002:'.sprintf('%02x', $myBytes[0]).sprintf('%02x', $myBytes[1]).':'.sprintf('%02x', $myBytes[2]).sprintf('%02x', $myBytes[3]).'::');
+        return IPv6::fromString('2002:' . sprintf('%02x', $myBytes[0]) . sprintf('%02x', $myBytes[1]) . ':' . sprintf('%02x', $myBytes[2]) . sprintf('%02x', $myBytes[3]) . '::');
     }
 
     /**
@@ -374,7 +374,7 @@ class IPv4 implements AddressInterface
     {
         $overflow = false;
         $bytes = $this->getBytes();
-        for ($i = count($bytes) - 1; $i >= 0; --$i) {
+        for ($i = count($bytes) - 1; $i >= 0; $i--) {
             if ($bytes[$i] === 255) {
                 if ($i === 0) {
                     $overflow = true;
@@ -382,7 +382,7 @@ class IPv4 implements AddressInterface
                 }
                 $bytes[$i] = 0;
             } else {
-                ++$bytes[$i];
+                $bytes[$i]++;
                 break;
             }
         }
@@ -399,7 +399,7 @@ class IPv4 implements AddressInterface
     {
         $overflow = false;
         $bytes = $this->getBytes();
-        for ($i = count($bytes) - 1; $i >= 0; --$i) {
+        for ($i = count($bytes) - 1; $i >= 0; $i--) {
             if ($bytes[$i] === 0) {
                 if ($i === 0) {
                     $overflow = true;
@@ -407,7 +407,7 @@ class IPv4 implements AddressInterface
                 }
                 $bytes[$i] = 255;
             } else {
-                --$bytes[$i];
+                $bytes[$i]--;
                 break;
             }
         }

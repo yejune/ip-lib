@@ -13,12 +13,12 @@ class SubnetPrefixTest extends TestCase
 
         // IPv4
         for ($i = 0; $i <= 32; $i++) {
-            $tests[] = array('0.0.0.0/'.$i, $i);
+            $tests[] = array('0.0.0.0/' . $i, $i);
         }
 
         // IPv6
         for ($i = 0; $i <= 128; $i++) {
-            $tests[] = array('0000:0000:0000:0000:0000:0000:0000:0000/'.$i, $i);
+            $tests[] = array('0000:0000:0000:0000:0000:0000:0000:0000/' . $i, $i);
         }
 
         return $tests;
@@ -26,6 +26,9 @@ class SubnetPrefixTest extends TestCase
 
     /**
      * @dataProvider ipProvider
+     *
+     * @param string $rangeString
+     * @param int $expectedPrefix
      */
     public function testSubnetPrefix($rangeString, $expectedPrefix)
     {

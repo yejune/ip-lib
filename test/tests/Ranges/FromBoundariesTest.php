@@ -21,14 +21,17 @@ class FromBoundariesTest extends TestCase
 
     /**
      * @dataProvider invalidProvider
+     *
+     * @param string|mixed $from
+     * @param string|mixed $to
      */
     public function testInvalid($from, $to)
     {
         $range = Factory::rangeFromBoundaries($from, $to);
-        $this->assertNull($range, "Boundaries '$from' -> '$to' should not be resolved to an address");
+        $this->assertNull($range, "Boundaries '{$from}' -> '{$to}' should not be resolved to an address");
         list($from, $to) = array($to, $from);
         $range = Factory::rangeFromBoundaries($from, $to);
-        $this->assertNull($range, "Boundaries '$from' -> '$to' should not be resolved to an address");
+        $this->assertNull($range, "Boundaries '{$from}' -> '{$to}' should not be resolved to an address");
     }
 
     public function validProvider()
@@ -66,15 +69,19 @@ class FromBoundariesTest extends TestCase
 
     /**
      * @dataProvider validProvider
+     *
+     * @param string $from
+     * @param string|null $to
+     * @param string $expected
      */
     public function testValid($from, $to, $expected)
     {
         $range = Factory::rangeFromBoundaries($from, $to);
-        $this->assertNotNull($range, "Boundaries '$from' -> '$to' should be resolved to an address");
-        $this->assertSame($expected, (string) $range, "Boundaries '$from' -> '$to' should be resolved to '$expected' instead of $range");
+        $this->assertNotNull($range, "Boundaries '{$from}' -> '{$to}' should be resolved to an address");
+        $this->assertSame($expected, (string) $range, "Boundaries '{$from}' -> '{$to}' should be resolved to '{$expected}' instead of {$range}");
         list($from, $to) = array($to, $from);
         $range = Factory::rangeFromBoundaries($from, $to);
-        $this->assertNotNull($range, "Boundaries '$from' -> '$to' should be resolved to an address");
-        $this->assertSame($expected, (string) $range, "Boundaries '$from' -> '$to' should be resolved to '$expected' instead of $range");
+        $this->assertNotNull($range, "Boundaries '{$from}' -> '{$to}' should be resolved to an address");
+        $this->assertSame($expected, (string) $range, "Boundaries '{$from}' -> '{$to}' should be resolved to '{$expected}' instead of {$range}");
     }
 }
