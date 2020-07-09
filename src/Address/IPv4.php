@@ -263,6 +263,8 @@ class IPv4 implements AddressInterface
                 '0.0.0.0/8' => array(RangeType::T_THISNETWORK, array('0.0.0.0/32' => RangeType::T_UNSPECIFIED)),
                 // RFC 5735
                 '10.0.0.0/8' => array(RangeType::T_PRIVATENETWORK),
+                // RFC 6598
+                '100.64.0.0/10' => array(RangeType::T_CGNAT),
                 // RFC 5735
                 '127.0.0.0/8' => array(RangeType::T_LOOPBACK),
                 // RFC 5735
