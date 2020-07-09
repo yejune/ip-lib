@@ -66,36 +66,51 @@ class IPv4 implements AddressInterface
      *
      * @param string|mixed $address the address to parse
      * @param bool $mayIncludePort set to false to avoid parsing addresses with ports
+     * @param bool $supportNonDecimalIPv4 set to true to support parsing non decimal (that is, octal and hexadecimal) IPv4 addresses.
      *
      * @return static|null
      */
-    public static function fromString($address, $mayIncludePort = true)
+    public static function fromString($address, $mayIncludePort = true, $supportNonDecimalIPv4 = false)
     {
-        $result = null;
-        if (is_string($address) && strpos($address, '.')) {
-            $rx = '([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})';
-            if ($mayIncludePort) {
-                $rx .= '(?::\d+)?';
-            }
-            $matches = null;
-            if (preg_match('/^'.$rx.'$/', $address, $matches)) {
-                $ok = true;
-                $nums = array();
-                for ($i = 1; $ok && $i <= 4; ++$i) {
-                    $ok = false;
-                    $n = (int) $matches[$i];
-                    if ($n >= 0 && $n <= 255) {
-                        $ok = true;
-                        $nums[] = (string) $n;
+        if (!is_string($address) || !strpos($address, '.')) {
+            return null;
+        }
+        $rxChunk = '0?[0-9]{1,3}';
+        if ($supportNonDecimalIPv4) {
+            $rxChunk = "(?:0x0*[0-9A-Fa-f]{1,2})|(?:{$rxChunk})";
+        }
+        $rx = "0*?({$rxChunk})\.0*?({$rxChunk})\.0*?({$rxChunk})\.0*?({$rxChunk})";
+        if ($mayIncludePort) {
+            $rx .= '(?::\d+)?';
+        }
+        $matches = null;
+        if (!preg_match('/^'.$rx.'$/', $address, $matches)) {
+            return null;
+        }
+        $nums = array();
+        for ($i = 1; $i <= 4; ++$i) {
+            $s = $matches[$i];
+            if ($supportNonDecimalIPv4) {
+                if (stripos($s, '0x') === 0) {
+                    $n = hexdec(substr($s, 2));
+                } elseif ($s[0] === '0') {
+                    if (!preg_match('/^[0-7]+$/', $s)) {
+                        return null;
                     }
+                    $n = octdec(substr($s, 1));
+                } else {
+                    $n = (int) $s;
                 }
-                if ($ok) {
-                    $result = new static(implode('.', $nums));
-                }
+            } else {
+                $n = (int) $s;
             }
+            if ($n < 0 || $n > 255) {
+                return null;
+            }
+            $nums[] = (string) $n;
         }
 
-        return $result;
+        return new static(implode('.', $nums));
     }
 
     /**
@@ -135,6 +150,54 @@ class IPv4 implements AddressInterface
         }
 
         return $this->address;
+    }
+
+    /**
+     * Get the octal representation of this IP address.
+     *
+     * @param bool $long
+     *
+     * @return string
+     *
+     * @example if $long == false: if the decimal representation is '0.7.8.255': '0.7.010.0377'
+     * @example if $long == true: if the decimal representation is '0.7.8.255': '0000.0007.0010.0377'
+     */
+    public function toOctal($long = false)
+    {
+        $chunks = array();
+        foreach ($this->getBytes() as $byte) {
+            if ($long) {
+                $chunks[] = sprintf('%04o', $byte);
+            } else {
+                $chunks[] = '0' . decoct($byte);
+            }
+        }
+
+        return implode('.', $chunks);
+    }
+
+    /**
+     * Get the hexadecimal representation of this IP address.
+     *
+     * @param bool $long
+     *
+     * @return string
+     *
+     * @example if $long == false: if the decimal representation is '0.9.10.255': '0.9.0xa.0xff'
+     * @example if $long == true: if the decimal representation is '0.9.10.255': '0x00.0x09.0x0a.0xff'
+     */
+    public function toHexadecimal($long = false)
+    {
+        $chunks = array();
+        foreach ($this->getBytes() as $byte) {
+            if ($long) {
+                $chunks[] = sprintf('0x%02x', $byte);
+            } else {
+                $chunks[] = '0x' . dechex($byte);
+            }
+        }
+        
+        return implode('.', $chunks);
     }
 
     /**
