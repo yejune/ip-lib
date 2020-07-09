@@ -77,7 +77,7 @@ class IPv4 implements AddressInterface
         }
         $rxChunk = '0?[0-9]{1,3}';
         if ($supportNonDecimalIPv4) {
-            $rxChunk = "(?:0x0*[0-9A-Fa-f]{1,2})|(?:{$rxChunk})";
+            $rxChunk = "(?:0[Xx]0*[0-9A-Fa-f]{1,2})|(?:{$rxChunk})";
         }
         $rx = "0*?({$rxChunk})\.0*?({$rxChunk})\.0*?({$rxChunk})\.0*?({$rxChunk})";
         if ($mayIncludePort) {
