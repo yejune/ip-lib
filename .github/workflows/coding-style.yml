@@ -1,4 +1,4 @@
-name: Check Coding Style
+name: coding style
 
 on:
   push:
