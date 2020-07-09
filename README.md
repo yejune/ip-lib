@@ -322,7 +322,7 @@ So, for example, these addresses all all equivalent to `192.168.0.1`:
 - `0300.0250.00.01` (only octal)
 - `192.0250.0.0x01` (decimal, octal and hexadecimal numbers)
 
-(try it: if you browse to [`http://0177.0.0.0x1`](http://0177.0.0.0x1), your browser will try to browse `http://127.0.0.1`.
+(try it: if you browse to [`http://0177.0.0.0x1`](http://0177.0.0.0x1), your browser will try to browse `http://127.0.0.1`).
 
 This library optionally accepts those alternative syntaxes:
 
@@ -343,7 +343,7 @@ var_export(\IPLib\Factory::rangeFromString('0177.0.0.0x1/32', false));
 // Prints NULL since the second argument is false
 
 var_export((string) \IPLib\Factory::rangeFromString('0177.0.0.0x1/32', true));
-// Prints '127.0.0.1/32' since the second argument is false
+// Prints '127.0.0.1/32' since the second argument is true
 ```
 
 ## Do you want to really say thank you?
