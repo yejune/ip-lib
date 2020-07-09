@@ -20,6 +20,11 @@ class RangeTypeTest extends TestCase
             array('10.0.0.0', Type::T_PRIVATENETWORK),
             array('10.1.0.0', Type::T_PRIVATENETWORK),
             array('10.255.255.255', Type::T_PRIVATENETWORK),
+            // 100.64.0.0/10
+            array('100.64.0.0', Type::T_CGNAT),
+            array('100.64.0.1', Type::T_CGNAT),
+            array('100.127.255.254', Type::T_CGNAT),
+            array('100.127.255.255', Type::T_CGNAT),
             // 127.0.0.0/8
             array('127.0.0.0', Type::T_LOOPBACK),
             array('127.0.0.1', Type::T_LOOPBACK),
