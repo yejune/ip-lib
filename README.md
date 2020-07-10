@@ -316,7 +316,7 @@ $searchQuery->closeCursor();
 IPv4 addresses are usually expresses in decimal notation, for example `192.168.0.1`.
 
 By the way, for historical reasons, widely used libraries (and browsers) accept IPv4 addresses with numbers in octal and/or hexadecimal format.
-So, for example, these addresses all all equivalent to `192.168.0.1`:
+So, for example, these addresses are all equivalent to `192.168.0.1`:
 
 - `0xC0.0xA8.0x0.0x01` (only hexadecimal)
 - `0300.0250.00.01` (only octal)
