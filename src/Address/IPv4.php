@@ -326,7 +326,7 @@ class IPv4 implements AddressInterface
     }
 
     /**
-     * Create an IPv6 representation of this address.
+     * Create an IPv6 representation of this address (in 6to4 notation).
      *
      * @return \IPLib\Address\IPv6
      */
@@ -335,6 +335,16 @@ class IPv4 implements AddressInterface
         $myBytes = $this->getBytes();
 
         return IPv6::fromString('2002:' . sprintf('%02x', $myBytes[0]) . sprintf('%02x', $myBytes[1]) . ':' . sprintf('%02x', $myBytes[2]) . sprintf('%02x', $myBytes[3]) . '::');
+    }
+
+    /**
+     * Create an IPv6 representation of this address (in IPv6 IPv4-mapped notation).
+     *
+     * @return \IPLib\Address\IPv6
+     */
+    public function toIPv6IPv4Mapped()
+    {
+        return IPv6::fromBytes(array_merge(array(0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff), $this->getBytes()));
     }
 
     /**
