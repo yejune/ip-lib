@@ -230,6 +230,30 @@ echo \IPLib\Range\Type::getName($type);
 // 'Unknown type'
 ```
 
+
+### Converting IP addresses
+
+This library supports converting IPv4 to/from IPv6 addresses using the [6to4 notation](https://tools.ietf.org/html/rfc3056) or the [IPv4-mapped notation](https://tools.ietf.org/html/rfc4291#section-2.5.5.2):
+
+```php
+$ipv4 = \IPLib\Factory::addressFromString('1.2.3.4');
+
+// 6to4 notation
+$ipv6 = $ipv4->toIPv6();
+// This will print "2002:102:304::"
+echo (string) $ipv6;
+// This will print "1.2.3.4"
+echo $ipv6->toIPv4();
+
+// IPv4-mapped notation
+$ipv6 = $ipv4->toIPv6IPv4Mapped();
+// This will print "::ffff:1.2.3.4"
+echo (string) $ipv6;
+// This will print "1.2.3.4"
+echo $ipv6_6to4->toIPv4();
+```
+
+
 ### Converting IP ranges
 
 This library supports IPv4/IPv6 ranges in pattern format (eg. `192.168.*.*`) and in CIDR/subnet format (eg. `192.168.0.0/16`), and it offers a way to convert between the two formats:

@@ -420,12 +420,16 @@ class IPv6 implements AddressInterface
      */
     public function toIPv4()
     {
-        $result = null;
         if (strpos($this->longAddress, '2002:') === 0) {
-            $result = IPv4::fromBytes(array_slice($this->getBytes(), 2, 4));
+            // 6to4
+            return IPv4::fromBytes(array_slice($this->getBytes(), 2, 4));
+        }
+        if (strpos($this->longAddress, '0000:0000:0000:0000:0000:ffff:') === 0) {
+            // IPv4-mapped IPv6 addresses
+            return IPv4::fromBytes(array_slice($this->getBytes(), -4));
         }
 
-        return $result;
+        return null;
     }
 
     /**
