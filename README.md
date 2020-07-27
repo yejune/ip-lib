@@ -267,6 +267,23 @@ echo \IPLib\Factory::rangeFromString('192.168.0.*')->getSubnetMask()->toString()
 echo \IPLib\Factory::rangeFromString('192.168.0.12/30')->getSubnetMask()->toString();
 ```
 
+### Getting the reverse DNS lookup address
+
+In order to perform reverse DNS queries, you need to use a special format of the IP addresses.
+
+You can use the `getReverseDNSLookupName()` method of the IP address instances to easily retrieve it:
+
+```php
+
+$ipv4 = \IPLib\Factory::addressFromString('1.2.3.255');
+// This will print 255.3.2.1.in-addr.arpa
+echo $ipv4->getReverseDNSLookupName();
+
+$ipv6 = \IPLib\Factory::addressFromString('1234:abcd::cafe:babe');
+// This will print e.b.a.b.e.f.a.c.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.d.c.b.a.4.3.2.1.ip6.arpa
+echo $ipv6->getReverseDNSLookupName();
+```
+
 ### Using a database
 
 This package offers a great feature: you can store address ranges in a database table, and check if an address is contained in one of the saved ranges with a simple query.
