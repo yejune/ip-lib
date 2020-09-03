@@ -13,7 +13,7 @@ use IPLib\Factory;
  * @example 127.0.0.1
  * @example ::1
  */
-class Single implements RangeInterface
+class Single extends AbstractRange
 {
     /**
      * @var \IPLib\Address\AddressInterface
