@@ -214,9 +214,9 @@ class Pattern extends AbstractRange
     }
 
     /**
-     * Get the subnet/CIDR representation of this range.
+     * {@inheritdoc}
      *
-     * @return \IPLib\Range\Subnet
+     * @see \IPLib\Range\RangeInterface::asSubnet()
      */
     public function asSubnet()
     {
@@ -226,6 +226,16 @@ class Pattern extends AbstractRange
             case AddressType::T_IPv6:
                 return new Subnet($this->getStartAddress(), $this->getEndAddress(), 16 * (8 - $this->asterisksCount));
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @see \IPLib\Range\RangeInterface::asPattern()
+     */
+    public function asPattern()
+    {
+        return $this;
     }
 
     /**

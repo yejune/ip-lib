@@ -186,6 +186,33 @@ class Subnet extends AbstractRange
     }
 
     /**
+     * {@inheritdoc}
+     *
+     * @see \IPLib\Range\RangeInterface::asSubnet()
+     */
+    public function asSubnet()
+    {
+        return $this;
+    }
+
+    /**
+     * Get the pattern (asterisk) representation (if applicable) of this range.
+     *
+     * @return \IPLib\Range\Pattern|null return NULL if this range can't be represented by a pattern notation
+     */
+    public function asPattern()
+    {
+        $address = $this->getStartAddress();
+        $networkPrefix = $this->getNetworkPrefix();
+        switch ($address->getAddressType()) {
+            case AddressType::T_IPv4:
+                return $networkPrefix % 8 === 0 ? new Pattern($address, $address, 4 - $networkPrefix / 8) : null;
+            case AddressType::T_IPv6:
+                return $networkPrefix % 16 === 0 ? new Pattern($address, $address, 8 - $networkPrefix / 16) : null;
+        }
+    }
+
+    /**
      * Get the 6to4 address IPv6 address range.
      *
      * @return self
@@ -207,23 +234,6 @@ class Subnet extends AbstractRange
     public function getNetworkPrefix()
     {
         return $this->networkPrefix;
-    }
-
-    /**
-     * Get the pattern representation (if applicable) of this range.
-     *
-     * @return \IPLib\Range\Pattern|null return NULL if this range can't be represented by a pattern notation
-     */
-    public function asPattern()
-    {
-        $address = $this->getStartAddress();
-        $networkPrefix = $this->getNetworkPrefix();
-        switch ($address->getAddressType()) {
-            case AddressType::T_IPv4:
-                return $networkPrefix % 8 === 0 ? new Pattern($address, $address, 4 - $networkPrefix / 8) : null;
-            case AddressType::T_IPv6:
-                return $networkPrefix % 16 === 0 ? new Pattern($address, $address, 8 - $networkPrefix / 16) : null;
-        }
     }
 
     /**

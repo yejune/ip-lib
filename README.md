@@ -302,6 +302,8 @@ echo \IPLib\Factory::rangeFromString('192.168.0.*')->asSubnet()->toString();
 echo \IPLib\Factory::rangeFromString('10.0.0.0/8')->asPattern()->toString();
 ```
 
+Please remark that all the range types implement the `asPattern()` and `asSubnet()` methods.
+
 ### Getting the subnet mask for IPv4 ranges
 
 You can use the `getSubnetMask()` to get the subnet mask for IPv4 ranges:

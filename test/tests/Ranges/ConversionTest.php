@@ -2,7 +2,9 @@
 
 namespace IPLib\Test\Ranges;
 
+use IPLib\Address\Type as AddressType;
 use IPLib\Factory;
+use IPLib\Range\Single;
 use IPLib\Test\TestCase;
 
 class ConversionTest extends TestCase
@@ -82,10 +84,12 @@ class ConversionTest extends TestCase
     {
         $subnetRange = Factory::rangeFromString($subnet);
         $this->assertInstanceOf('IPLib\Range\Subnet', $subnetRange);
+        $this->assertSame((string) $subnetRange, (string) $subnetRange->asSubnet());
         $patternRange = $subnetRange->asPattern();
         if ($pattern === '') {
             $this->assertNull($patternRange);
         } else {
+            $this->assertSame((string) $patternRange, (string) $patternRange->asPattern());
             $this->assertInstanceOf('IPLib\Range\Pattern', $patternRange);
             $this->assertSame($pattern, (string) $patternRange);
             $subnetRange2 = $patternRange->asSubnet();
@@ -95,5 +99,16 @@ class ConversionTest extends TestCase
             }
             $this->assertSame($subnet2, (string) $subnetRange2);
         }
+        $singleRange = Single::fromAddress($subnetRange->getStartAddress());
+        $singleRangeAsPattern = $singleRange->asPattern();
+        $this->assertInstanceOf('IPLib\Range\Pattern', $singleRangeAsPattern);
+        $this->assertNotContains('*', (string) $singleRangeAsPattern);
+        $singleRangeAsSubnet = $singleRange->asSubnet();
+        $this->assertInstanceOf('IPLib\Range\Subnet', $singleRangeAsSubnet);
+        $sizes = array(
+            AddressType::T_IPv4 => 32,
+            AddressType::T_IPv6 => 128,
+        );
+        $this->assertRegExp('_/' . $sizes[$singleRange->getStartAddress()->getAddressType()] . '$_', (string) $singleRangeAsSubnet);
     }
 }

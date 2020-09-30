@@ -178,6 +178,31 @@ class Single extends AbstractRange
     /**
      * {@inheritdoc}
      *
+     * @see \IPLib\Range\RangeInterface::asSubnet()
+     */
+    public function asSubnet()
+    {
+        $networkPrefixes = array(
+            AddressType::T_IPv4 => 32,
+            AddressType::T_IPv6 => 128,
+        );
+
+        return new Subnet($this->address, $this->address, $networkPrefixes[$this->address->getAddressType()]);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @see \IPLib\Range\RangeInterface::asPattern()
+     */
+    public function asPattern()
+    {
+        return new Pattern($this->address, $this->address, 0);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
      * @see \IPLib\Range\RangeInterface::getSubnetMask()
      */
     public function getSubnetMask()
