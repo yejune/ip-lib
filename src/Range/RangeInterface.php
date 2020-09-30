@@ -93,4 +93,18 @@ interface RangeInterface
      * @return \IPLib\Address\IPv4|null return NULL if the range is an IPv6 range, the subnet mask otherwise
      */
     public function getSubnetMask();
+
+    /**
+     * Get the subnet/CIDR representation of this range.
+     *
+     * @return \IPLib\Range\Subnet
+     */
+    public function asSubnet();
+
+    /**
+     * Get the pattern/asterisk representation (if applicable) of this range.
+     *
+     * @return \IPLib\Range\Pattern|null return NULL if this range can't be represented by a pattern notation
+     */
+    public function asPattern();
 }
