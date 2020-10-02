@@ -262,4 +262,14 @@ class Pattern extends AbstractRange
 
         return IPv4::fromBytes($bytes);
     }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @see \IPLib\Range\RangeInterface::getReverseDNSLookupName()
+     */
+    public function getReverseDNSLookupName()
+    {
+        return $this->asterisksCount === 0 ? array($this->getStartAddress()->getReverseDNSLookupName()) : $this->asSubnet()->getReverseDNSLookupName();
+    }
 }

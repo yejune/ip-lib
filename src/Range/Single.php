@@ -213,4 +213,14 @@ class Single extends AbstractRange
 
         return IPv4::fromBytes(array(255, 255, 255, 255));
     }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @see \IPLib\Range\RangeInterface::getReverseDNSLookupName()
+     */
+    public function getReverseDNSLookupName()
+    {
+        return array($this->getStartAddress()->getReverseDNSLookupName());
+    }
 }

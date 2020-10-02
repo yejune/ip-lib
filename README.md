@@ -333,6 +333,24 @@ echo $ipv4->getReverseDNSLookupName();
 echo $ipv6->getReverseDNSLookupName();
 ```
 
+You can also use `getReverseDNSLookupName()` for IP ranges.
+In this case, the result is an array of strings:
+
+```php
+$range = \IPLib\Factory::rangeFromString('10.155.16.0/22');
+
+/*
+ * This will print:
+ * array (
+ *   0 => '16.155.10.in-addr.arpa',
+ *   1 => '17.155.10.in-addr.arpa',
+ *   2 => '18.155.10.in-addr.arpa',
+ *   3 => '19.155.10.in-addr.arpa',
+ * )
+*/
+var_export($range->getReverseDNSLookupName());
+```
+
 ### Using a database
 
 This package offers a great feature: you can store address ranges in a database table, and check if an address is contained in one of the saved ranges with a simple query.
