@@ -4,6 +4,7 @@ namespace IPLib\Range;
 
 use IPLib\Address\AddressInterface;
 use IPLib\Address\IPv4;
+use IPLib\Address\IPv6;
 use IPLib\Address\Type as AddressType;
 use IPLib\Factory;
 
@@ -258,5 +259,47 @@ class Subnet extends AbstractRange
         $bytes = array_pad($bytes, 4, 0);
 
         return IPv4::fromBytes($bytes);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @see \IPLib\Range\RangeInterface::getReverseDNSLookupName()
+     */
+    public function getReverseDNSLookupName()
+    {
+        switch ($this->getAddressType()) {
+            case AddressType::T_IPv4:
+                $unitSize = 8; // bytes
+                $maxUnits = 4;
+                $isHex = false;
+                $rxUnit = '\d+';
+                break;
+            case AddressType::T_IPv6:
+                $unitSize = 4; // nibbles
+                $maxUnits = 32;
+                $isHex = true;
+                $rxUnit = '[0-9A-Fa-f]';
+                break;
+        }
+        $totBits = $unitSize * $maxUnits;
+        $prefixUnits = (int) ($this->networkPrefix / $unitSize);
+        $extraBits = ($totBits - $this->networkPrefix) % $unitSize;
+        if ($extraBits !== 0) {
+            $prefixUnits += 1;
+        }
+        $numVariants = 1 << $extraBits;
+        $result = array();
+        $unitsToRemove = $maxUnits - $prefixUnits;
+        $initialPointer = preg_replace("/^(({$rxUnit})\.){{$unitsToRemove}}/", '', $this->getStartAddress()->getReverseDNSLookupName());
+        $chunks = explode('.', $initialPointer, 2);
+        for ($index = 0; $index < $numVariants; $index++) {
+            if ($index !== 0) {
+                $chunks[0] = $isHex ? dechex(1 + hexdec($chunks[0])) : (string) (1 + (int) $chunks[0]);
+            }
+            $result[] = implode('.', $chunks);
+        }
+
+        return $result;
     }
 }
