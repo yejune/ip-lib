@@ -279,6 +279,21 @@ class IPv6 implements AddressInterface
     }
 
     /**
+     * {@inheritdoc}
+     *
+     * @see \IPLib\Address\AddressInterface::getBits()
+     */
+    public function getBits()
+    {
+        $parts = array();
+        foreach ($this->getBytes() as $byte) {
+            $parts[] = sprintf('%08b', $byte);
+        }
+
+        return implode('', $parts);
+    }
+
+    /**
      * Get the word list of the IP address.
      *
      * @return int[]

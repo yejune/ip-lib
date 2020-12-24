@@ -232,6 +232,21 @@ class IPv4 implements AddressInterface
     /**
      * {@inheritdoc}
      *
+     * @see \IPLib\Address\AddressInterface::getBits()
+     */
+    public function getBits()
+    {
+        $parts = array();
+        foreach ($this->getBytes() as $byte) {
+            $parts[] = sprintf('%08b', $byte);
+        }
+
+        return implode('', $parts);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
      * @see \IPLib\Address\AddressInterface::getAddressType()
      */
     public function getAddressType()
