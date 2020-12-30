@@ -82,6 +82,16 @@ class IPv6 implements AddressInterface
     }
 
     /**
+     * {@inheritdoc}
+     *
+     * @see \IPLib\Address\AddressInterface::getNumberOfBits()
+     */
+    public static function getNumberOfBits()
+    {
+        return 128;
+    }
+
+    /**
      * Parse a string and returns an IPv6 instance if the string is valid, or null otherwise.
      *
      * @param string|mixed $address the address to parse
