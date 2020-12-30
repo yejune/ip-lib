@@ -72,6 +72,16 @@ class IPv4 implements AddressInterface
     }
 
     /**
+     * {@inheritdoc}
+     *
+     * @see \IPLib\Address\AddressInterface::getNumberOfBits()
+     */
+    public static function getNumberOfBits()
+    {
+        return 32;
+    }
+
+    /**
      * Parse a string and returns an IPv4 instance if the string is valid, or null otherwise.
      *
      * @param string|mixed $address the address to parse

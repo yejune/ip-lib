@@ -17,6 +17,16 @@ interface AddressInterface
     public function __toString();
 
     /**
+     * Get the number of bits representing this address type.
+     *
+     * @return int
+     *
+     * @example 32 for IPv4
+     * @example 128 for IPv6
+     */
+    public static function getNumberOfBits();
+
+    /**
      * Get the string representation of this address.
      *
      * @param bool $long set to true to have a long/full representation, false otherwise
