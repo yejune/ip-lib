@@ -77,36 +77,19 @@ class Factory
     }
 
     /**
-     * Create a Range instance starting from its boundaries.
+     * Create the smallest address range that comprises two addresses.
      *
      * @param string|\IPLib\Address\AddressInterface $from
      * @param string|\IPLib\Address\AddressInterface $to
      * @param bool $supportNonDecimalIPv4 set to true to support parsing non decimal (that is, octal and hexadecimal) IPv4 addresses
      *
-     * @return \IPLib\Range\RangeInterface|null
+     * @return \IPLib\Range\RangeInterface|null return NULL if $from and/or $to are invalid addresses, or if both are NULL or empty strings
      */
     public static function rangeFromBoundaries($from, $to, $supportNonDecimalIPv4 = false)
     {
-        $result = null;
-        $invalid = false;
-        foreach (array('from', 'to') as $param) {
-            if (!($$param instanceof AddressInterface)) {
-                $$param = (string) $$param;
-                if ($$param === '') {
-                    $$param = null;
-                } else {
-                    $$param = static::addressFromString($$param, true, true, $supportNonDecimalIPv4);
-                    if ($$param === null) {
-                        $invalid = true;
-                    }
-                }
-            }
-        }
-        if ($invalid === false) {
-            $result = static::rangeFromBoundaryAddresses($from, $to);
-        }
+        list($from, $to) = self::parseBoundaries($from, $to, $supportNonDecimalIPv4);
 
-        return $result;
+        return $from === false || $to === false ? null : static::rangeFromBoundaryAddresses($from, $to);
     }
 
     /**
@@ -152,6 +135,38 @@ class Factory
                     $result = static::rangeFromString($from->toString(true) . '/' . (string) $sameBits);
                 }
             }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param string|\IPLib\Address\AddressInterface $from
+     * @param string|\IPLib\Address\AddressInterface $to
+     * @param bool $supportNonDecimalIPv4
+     *
+     * @return \IPLib\Address\AddressInterface[]|null[]|false[]
+     */
+    private static function parseBoundaries($from, $to, $supportNonDecimalIPv4 = false)
+    {
+        $result = array();
+        foreach (array('from', 'to') as $param) {
+            $value = $$param;
+            if (!($value instanceof AddressInterface)) {
+                $value = (string) $value;
+                if ($value === '') {
+                    $value = null;
+                } else {
+                    $value = static::addressFromString($value, true, true, $supportNonDecimalIPv4);
+                    if ($value === null) {
+                        $value = false;
+                    }
+                }
+            }
+            $result[] = $value;
+        }
+        if ($result[0] && $result[1] && strcmp($result[0]->getComparableString(), $result[1]->getComparableString()) > 0) {
+            $result = array($result[1], $result[0]);
         }
 
         return $result;
