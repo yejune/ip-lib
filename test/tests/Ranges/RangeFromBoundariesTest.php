@@ -5,7 +5,7 @@ namespace IPLib\Test\Ranges;
 use IPLib\Factory;
 use IPLib\Test\TestCase;
 
-class FromBoundariesTest extends TestCase
+class RangeFromBoundariesTest extends TestCase
 {
     public function invalidProvider()
     {

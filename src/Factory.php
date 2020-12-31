@@ -3,6 +3,8 @@
 namespace IPLib;
 
 use IPLib\Address\AddressInterface;
+use IPLib\Range\Subnet;
+use IPLib\Service\RangesFromBounradyCalculator;
 
 /**
  * Factory methods to build class instances.
@@ -83,13 +85,42 @@ class Factory
      * @param string|\IPLib\Address\AddressInterface $to
      * @param bool $supportNonDecimalIPv4 set to true to support parsing non decimal (that is, octal and hexadecimal) IPv4 addresses
      *
-     * @return \IPLib\Range\RangeInterface|null return NULL if $from and/or $to are invalid addresses, or if both are NULL or empty strings
+     * @return \IPLib\Range\RangeInterface|null return NULL if $from and/or $to are invalid addresses, or if both are NULL or empty strings, or if they are addresses of different types
      */
     public static function rangeFromBoundaries($from, $to, $supportNonDecimalIPv4 = false)
     {
         list($from, $to) = self::parseBoundaries($from, $to, $supportNonDecimalIPv4);
 
         return $from === false || $to === false ? null : static::rangeFromBoundaryAddresses($from, $to);
+    }
+
+    /**
+     * Create a list of Range instances that exactly describes all the addresses between the two provided addresses.
+     *
+     * @param string|\IPLib\Address\AddressInterface $from
+     * @param string|\IPLib\Address\AddressInterface $to
+     * @param bool $supportNonDecimalIPv4 set to true to support parsing non decimal (that is, octal and hexadecimal) IPv4 addresses
+     *
+     * @return \IPLib\Range\Subnet[]|null return NULL if $from and/or $to are invalid addresses, or if both are NULL or empty strings, or if they are addresses of different types
+     */
+    public static function rangesFromBoundaries($from, $to, $supportNonDecimalIPv4 = false)
+    {
+        list($from, $to) = self::parseBoundaries($from, $to, $supportNonDecimalIPv4);
+        if (($from === false || $to === false) || ($from === null && $to === null)) {
+            return null;
+        }
+        if ($from === null || $to === null) {
+            $address = $from ? $from : $to;
+
+            return array(new Subnet($address, $address, $address->getNumberOfBits()));
+        }
+        $numberOfBits = $from->getNumberOfBits();
+        if ($to->getNumberOfBits() !== $numberOfBits) {
+            return null;
+        }
+        $calculator = new RangesFromBounradyCalculator($numberOfBits);
+
+        return $calculator->getRanges($from, $to);
     }
 
     /**

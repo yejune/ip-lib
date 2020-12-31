@@ -58,7 +58,7 @@ class RangesFromBounradyCalculator
      * @param \IPLib\Address\AddressInterface $from
      * @param \IPLib\Address\AddressInterface $to
      *
-     * @return \IPLib\Range\Subnet|null return NULL if the two addresses have an invalid number of bits (that is, different from the one passed to the constructor of this class)
+     * @return \IPLib\Range\Subnet[]|null return NULL if the two addresses have an invalid number of bits (that is, different from the one passed to the constructor of this class)
      */
     public function getRanges(AddressInterface $from, AddressInterface $to)
     {
