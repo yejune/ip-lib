@@ -7,7 +7,7 @@ use IPLib\Test\TestCase;
 
 class NextNthTest extends TestCase
 {
-    public function NextNthProvider()
+    public function nextNthProvider()
     {
         return array(
             array('0.0.0.1', 500, '0.0.1.245'),
@@ -27,7 +27,7 @@ class NextNthTest extends TestCase
     }
 
     /**
-     * @dataProvider NextNthProvider
+     * @dataProvider nextNthProvider
      *
      * @param string $addressString
      * @param int    $n
@@ -36,11 +36,26 @@ class NextNthTest extends TestCase
     public function testNextNth($addressString, $n, $expected)
     {
         $address = Factory::addressFromString($addressString);
-        $this->assertInstanceof('IPLib\Address\AddressInterface', $address, "Checking that {$addressString} is a valid address");
+        $this->assertInstanceof(
+            'IPLib\Address\AddressInterface',
+            $address,
+            "Checking that {$addressString} is a valid address",
+        );
+
         $next = $address->getNextNthAddress($n);
-        $this->assertSame($expected, (string) $next, "Checking the address {$addressString} " . ($n <=> 0 ? '+' : '-') . " " . abs($n));
+
+        $this->assertSame(
+            $expected,
+            (string) $next,
+            "Checking the address {$addressString} " . ($n > 0 ? "+" : "-") . " " . abs($n),
+        );
+
         if ($next !== null) {
-            $this->assertSame($addressString, (string) $next->getNextNthAddress((-1) * $n), "Checking the address after the nth address before the nth {$addressString}");
+            $this->assertSame(
+                $addressString,
+                (string) $next->getNextNthAddress((-1) * $n),
+                "Checking the address after the nth address before the nth {$addressString}",
+            );
         }
     }
 }

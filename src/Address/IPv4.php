@@ -407,7 +407,7 @@ class IPv4 implements AddressInterface
      */
     public function getNextNthAddress($n)
     {
-        if (! is_int($n)) {
+        if (!is_int($n)) {
             return null;
         }
 
