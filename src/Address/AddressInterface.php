@@ -100,6 +100,13 @@ interface AddressInterface
     public function matches(RangeInterface $range);
 
     /**
+     * Shorthand for integer addition and subtraction (if available).
+     *
+     * @return \IPLib\Address\AddressInterface|null
+     */
+    public function getNextNthAddress($n);
+
+    /**
      * Get the address right after this IP address (if available).
      *
      * @return \IPLib\Address\AddressInterface|null
