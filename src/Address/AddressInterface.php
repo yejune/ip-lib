@@ -102,6 +102,8 @@ interface AddressInterface
     /**
      * Shorthand for integer addition and subtraction (if available).
      *
+     * @param int $n number of addition/subtraction
+     *
      * @return \IPLib\Address\AddressInterface|null
      */
     public function getNextNthAddress($n);
