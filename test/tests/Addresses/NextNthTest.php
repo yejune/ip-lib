@@ -39,7 +39,7 @@ class NextNthTest extends TestCase
         $this->assertInstanceof(
             'IPLib\Address\AddressInterface',
             $address,
-            "Checking that {$addressString} is a valid address",
+            "Checking that {$addressString} is a valid address"
         );
 
         $next = $address->getNextNthAddress($n);
@@ -47,14 +47,14 @@ class NextNthTest extends TestCase
         $this->assertSame(
             $expected,
             (string) $next,
-            "Checking the address {$addressString} " . ($n > 0 ? "+" : "-") . " " . abs($n),
+            "Checking the address {$addressString} " . ($n > 0 ? "+" : "-") . " " . abs($n)
         );
 
         if ($next !== null) {
             $this->assertSame(
                 $addressString,
                 (string) $next->getNextNthAddress((-1) * $n),
-                "Checking the address after the nth address before the nth {$addressString}",
+                "Checking the address after the nth address before the nth {$addressString}"
             );
         }
     }
