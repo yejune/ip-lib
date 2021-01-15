@@ -16,6 +16,7 @@ class NextNthTest extends TestCase
             array('1.2.3.0', -1024, '1.1.255.0'),
             array('1.255.255.253', 3, '2.0.0.0'),
             array('255.255.255.253', 3, ''),
+            array('255.255.255.253', null, ''),
             array('::1', 65536, '::1:1'),
             array('::', -500, ''),
             array('::fffc', 3, '::ffff'),
@@ -23,6 +24,7 @@ class NextNthTest extends TestCase
             array('::ffff:ffff:ffff:fffd', 3, '0:0:0:1::'),
             array('0:ffff:ffff:ffff:ffff:ffff:ffff:ffff', 3, '1::2'),
             array('ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffd', 3, ''),
+            array('ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffd', null, ''),
         );
     }
 
