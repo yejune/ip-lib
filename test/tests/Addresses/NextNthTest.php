@@ -30,7 +30,7 @@ class NextNthTest extends TestCase
      * @dataProvider nextNthProvider
      *
      * @param string $addressString
-     * @param int    $n
+     * @param int $n
      * @param string $expected
      */
     public function testNextNth($addressString, $n, $expected)
@@ -47,7 +47,7 @@ class NextNthTest extends TestCase
         $this->assertSame(
             $expected,
             (string) $next,
-            "Checking the address {$addressString} " . ($n > 0 ? "+" : "-") . " " . abs($n)
+            "Checking the address {$addressString} " . ($n > 0 ? '+' : '-') . ' ' . abs($n)
         );
 
         if ($next !== null) {
