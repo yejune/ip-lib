@@ -1,6 +1,4 @@
-[![TravisCI Build Status](https://api.travis-ci.org/mlocati/ip-lib.svg?branch=master)](https://travis-ci.org/mlocati/ip-lib)
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/mlocati/ip-lib?branch=master&svg=true)](https://ci.appveyor.com/project/mlocati/ip-lib)
-[![Coding Style checks status](https://github.com/mlocati/ip-lib/workflows/coding%20style/badge.svg)](https://github.com/mlocati/ip-lib/actions?query=workflow%3A%22coding+style%22)
+[![Tests](https://github.com/mlocati/ip-lib/workflows/tests/badge.svg)](https://github.com/mlocati/ip-lib/actions?query=workflow%3A%22tests%22)
 [![Coverage Status](https://coveralls.io/repos/github/mlocati/ip-lib/badge.svg?branch=master)](https://coveralls.io/github/mlocati/ip-lib?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/mlocati/ip-lib/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/mlocati/ip-lib/?branch=master)
 ![Packagist Downloads](https://img.shields.io/packagist/dm/mlocati/ip-lib)
