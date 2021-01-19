@@ -9,7 +9,7 @@ class NextNthTest extends TestCase
 {
     public function nextNthProvider()
     {
-        return array(
+        $result = array(
             array('0.0.0.1', 500, '0.0.1.245'),
             array('0.0.0.2', -500, ''),
             array('1.2.3.4', 1024, '1.2.7.4'),
@@ -25,7 +25,28 @@ class NextNthTest extends TestCase
             array('0:ffff:ffff:ffff:ffff:ffff:ffff:ffff', 3, '1::2'),
             array('ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffd', 3, ''),
             array('ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffd', null, ''),
+            array('0.0.0.0', -1, ''),
+            array('0.0.0.0', 0, '0.0.0.0'),
+            array('0.0.0.0', 1, '0.0.0.1'),
+            array('::', -1, ''),
+            array('::', 0, '::'),
+            array('::', 1, '::1'),
+            array('0.0.0.0', 0x7fffffff, '127.255.255.255'),
+            array('0.0.0.1', 0x7fffffff, '128.0.0.0'),
+            array('::', 0x7fffffff, '::7fff:ffff'),
+            array('::1', 0x7fffffff, '::8000:0'),
         );
+        if (PHP_INT_SIZE > 4) {
+            $result = array_merge($result, array(
+                array('0.0.0.0', PHP_INT_MAX, ''),
+                array('0.0.0.0', 0xffffffff, '255.255.255.255'),
+                array('0.0.0.0', 0x100000000, ''),
+                array('::', 0xffffffff, '::ffff:ffff'),
+                array('::1', 0x100000000, '::1:0:1'),
+            ));
+        }
+
+        return $result;
     }
 
     /**
