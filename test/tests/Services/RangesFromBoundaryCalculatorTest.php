@@ -6,24 +6,24 @@ use IPLib\Address\AddressInterface;
 use IPLib\Address\IPv4;
 use IPLib\Address\IPv6;
 use IPLib\Factory;
-use IPLib\Service\RangesFromBounradyCalculator;
+use IPLib\Service\RangesFromBoundaryCalculator;
 use IPLib\Test\TestCase;
 
-class RangesFromBounradyCalculatorTest extends TestCase
+class RangesFromBoundaryCalculatorTest extends TestCase
 {
     /**
-     * @var \IPLib\Service\RangesFromBounradyCalculator[]
+     * @var \IPLib\Service\RangesFromBoundaryCalculator[]
      */
     private static $calculators = array();
 
     /**
      * @dataProvider provideInvalidCases
      *
-     * @param \IPLib\Service\RangesFromBounradyCalculator $calculator
+     * @param \IPLib\Service\RangesFromBoundaryCalculator $calculator
      * @param \IPLib\Address\AddressInterface $from
      * @param \IPLib\Address\AddressInterface $to
      */
-    public function testInvalid(RangesFromBounradyCalculator $calculator, AddressInterface $from, AddressInterface $to)
+    public function testInvalid(RangesFromBoundaryCalculator $calculator, AddressInterface $from, AddressInterface $to)
     {
         $ranges = $calculator->getRanges($from, $to);
         $this->assertNull($ranges);
@@ -117,12 +117,12 @@ class RangesFromBounradyCalculatorTest extends TestCase
     /**
      * @param int $numOfBits
      *
-     * @return \IPLib\Service\RangesFromBounradyCalculator
+     * @return \IPLib\Service\RangesFromBoundaryCalculator
      */
     private static function getCalculator($numOfBits)
     {
         if (!isset(self::$calculators[$numOfBits])) {
-            self::$calculators[$numOfBits] = new RangesFromBounradyCalculator($numOfBits);
+            self::$calculators[$numOfBits] = new RangesFromBoundaryCalculator($numOfBits);
         }
 
         return self::$calculators[$numOfBits];
