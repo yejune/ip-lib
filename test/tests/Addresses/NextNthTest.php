@@ -55,7 +55,7 @@ class NextNthTest extends TestCase
         if ($next !== null) {
             $this->assertSame(
                 $addressString,
-                (string) $next->getNextNthAddress((-1) * $n),
+                (string) $next->getNextNthAddress(-$n),
                 "Checking the address after the nth address before the nth {$addressString}"
             );
         }
