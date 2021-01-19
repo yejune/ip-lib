@@ -9,7 +9,7 @@ use IPLib\Range\Subnet;
 /**
  * Helper class to calculate the subnets describing all (and only all) the addresses between two bouundaries.
  */
-class RangesFromBounradyCalculator
+class RangesFromBoundaryCalculator
 {
     /**
      * The BinaryMath instance to be used to perform bitwise poerations.
