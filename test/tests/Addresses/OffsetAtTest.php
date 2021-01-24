@@ -5,9 +5,9 @@ namespace IPLib\Test\Addresses;
 use IPLib\Factory;
 use IPLib\Test\TestCase;
 
-class NextNthTest extends TestCase
+class OffsetAtTest extends TestCase
 {
-    public function nextNthProvider()
+    public function offsetAtProvider()
     {
         $result = array(
             array('0.0.0.1', 500, '0.0.1.245'),
@@ -50,13 +50,13 @@ class NextNthTest extends TestCase
     }
 
     /**
-     * @dataProvider nextNthProvider
+     * @dataProvider offsetAtProvider
      *
      * @param string $addressString
      * @param int $n
      * @param string $expected
      */
-    public function testNextNth($addressString, $n, $expected)
+    public function testOffsetAt($addressString, $n, $expected)
     {
         $address = Factory::addressFromString($addressString);
         $this->assertInstanceof(
