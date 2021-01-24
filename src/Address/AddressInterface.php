@@ -110,14 +110,14 @@ interface AddressInterface
      * @example: passing -1 to the address 127.0.0.1 will result in 127.0.0.0
      * @example: passing -1 to the address 0.0.0.0 will result in NULL
      */
-    public function getNextNthAddress($n);
+    public function getAddressAtOffset($n);
 
     /**
      * Get the address right after this IP address (if available).
      *
      * @return \IPLib\Address\AddressInterface|null
      *
-     * @see \IPLib\Address\AddressInterface::getNextNthAddress()
+     * @see \IPLib\Address\AddressInterface::getAddressAtOffset()
      */
     public function getNextAddress();
 
@@ -126,7 +126,7 @@ interface AddressInterface
      *
      * @return \IPLib\Address\AddressInterface|null
      *
-     * @see \IPLib\Address\AddressInterface::getNextNthAddress()
+     * @see \IPLib\Address\AddressInterface::getAddressAtOffset()
      */
     public function getPreviousAddress();
 

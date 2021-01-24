@@ -506,9 +506,9 @@ class IPv6 implements AddressInterface
     /**
      * {@inheritdoc}
      *
-     * @see \IPLib\Address\AddressInterface::getNextNthAddress()
+     * @see \IPLib\Address\AddressInterface::getAddressAtOffset()
      */
-    public function getNextNthAddress($n)
+    public function getAddressAtOffset($n)
     {
         if (!is_int($n)) {
             return null;
@@ -541,7 +541,7 @@ class IPv6 implements AddressInterface
      */
     public function getNextAddress()
     {
-        return $this->getNextNthAddress(1);
+        return $this->getAddressAtOffset(1);
     }
 
     /**
@@ -551,7 +551,7 @@ class IPv6 implements AddressInterface
      */
     public function getPreviousAddress()
     {
-        return $this->getNextNthAddress(-1);
+        return $this->getAddressAtOffset(-1);
     }
 
     /**
