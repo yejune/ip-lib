@@ -5,9 +5,9 @@ namespace IPLib\Test\Addresses;
 use IPLib\Factory;
 use IPLib\Test\TestCase;
 
-class OffsetAtTest extends TestCase
+class AtOffsetTest extends TestCase
 {
-    public function offsetAtProvider()
+    public function atOffsetProvider()
     {
         $result = array(
             array('0.0.0.1', 500, '0.0.1.245'),
@@ -50,13 +50,13 @@ class OffsetAtTest extends TestCase
     }
 
     /**
-     * @dataProvider offsetAtProvider
+     * @dataProvider atOffsetProvider
      *
      * @param string $addressString
      * @param int $n
      * @param string $expected
      */
-    public function testOffsetAt($addressString, $n, $expected)
+    public function testAtOffset($addressString, $n, $expected)
     {
         $address = Factory::addressFromString($addressString);
         $this->assertInstanceof(
