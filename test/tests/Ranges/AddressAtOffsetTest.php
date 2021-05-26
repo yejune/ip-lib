@@ -22,6 +22,9 @@ class AddressAtOffsetTest extends TestCase
             array('::ff00/120', -16, '::fff0'),
             array('::ff00/120', -256, '::ff00'),
             array('::ff00/120', -257, null),
+            array('255.255.255.255/32', 1, null),
+            array('::ff00/120', '0', null),
+            array('::ff00/120', 'invalid', null),
         );
     }
 
@@ -29,7 +32,7 @@ class AddressAtOffsetTest extends TestCase
      * @dataProvider ipProvider
      *
      * @param string $rangeString
-     * @param int $n
+     * @param int|mixed $n
      * @param string|null $expected
      */
     public function testAddressAtOffset($rangeString, $n, $expected)
