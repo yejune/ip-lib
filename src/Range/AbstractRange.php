@@ -60,7 +60,7 @@ abstract class AbstractRange implements RangeInterface
         }
 
         $address = null;
-        if ($n > 0) {
+        if ($n >= 0) {
             $start = Factory::addressFromString($this->getComparableStartString());
             $address = $start->getAddressAtOffset($n);
         } else {
