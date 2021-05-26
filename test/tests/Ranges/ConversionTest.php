@@ -102,13 +102,13 @@ class ConversionTest extends TestCase
         $singleRange = Single::fromAddress($subnetRange->getStartAddress());
         $singleRangeAsPattern = $singleRange->asPattern();
         $this->assertInstanceOf('IPLib\Range\Pattern', $singleRangeAsPattern);
-        $this->assertNotContains('*', (string) $singleRangeAsPattern);
+        $this->assertStringNotContainsString('*', (string) $singleRangeAsPattern);
         $singleRangeAsSubnet = $singleRange->asSubnet();
         $this->assertInstanceOf('IPLib\Range\Subnet', $singleRangeAsSubnet);
         $sizes = array(
             AddressType::T_IPv4 => 32,
             AddressType::T_IPv6 => 128,
         );
-        $this->assertRegExp('_/' . $sizes[$singleRange->getStartAddress()->getAddressType()] . '$_', (string) $singleRangeAsSubnet);
+        $this->assertMatchRegExp('_/' . $sizes[$singleRange->getStartAddress()->getAddressType()] . '$_', (string) $singleRangeAsSubnet);
     }
 }

@@ -4,3 +4,4 @@
 /composer.lock
 /ocular.phar
 /php-coveralls.phar
+/.phpunit.result.cache

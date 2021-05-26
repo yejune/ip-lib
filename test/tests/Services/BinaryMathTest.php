@@ -12,7 +12,12 @@ class BinaryMathTest extends TestCase
      */
     private static $math;
 
-    public static function setUpBeforeClass()
+    /**
+     * {@inheritdoc}
+     *
+     * @see \IPLib\Test\TestCaseBase::doSetUpBeforeClass()
+     */
+    protected static function doSetUpBeforeClass()
     {
         self::$math = new BinaryMath();
     }
