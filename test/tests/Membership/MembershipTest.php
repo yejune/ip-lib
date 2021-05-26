@@ -61,7 +61,7 @@ class MembershipTest extends DBTestCase
             $this->assertSame(false, $rangeObject->contains($addressObject), "Failed to check that '{$range}' does not contain '{$address}'");
             $this->assertSame(false, $addressObject->matches($rangeObject), "Failed to check that '{$address}' is not contained in '{$range}'");
         }
-        $pdo = $this->getConnection()->getConnection();
+        $pdo = $this->getConnection();
         $insertQuery = $pdo->prepare('insert into ranges (rangeRepresentation, addressType, rangeFrom, rangeTo) values (:rangeRepresentation, :addressType, :rangeFrom, :rangeTo)');
         $insertQuery->execute(array(
             ':rangeRepresentation' => $rangeObject->__toString(),

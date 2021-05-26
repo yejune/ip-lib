@@ -3,56 +3,45 @@
 namespace IPLib\Test;
 
 use PDO;
-use PHPUnit\DbUnit\TestCase as PHPUnitTestCase;
 
-abstract class DBTestCase extends PHPUnitTestCase
+abstract class DBTestCase extends TestCase
 {
     /**
-     * @var PDO|null
+     * @var \PDO|null
      */
-    private static $pdo = null;
-
-    /**
-     * @var \PHPUnit\DbUnit\Database\Connection|null
-     */
-    private $connection;
+    private static $connection = null;
 
     /**
      * {@inheritdoc}
      *
-     * @see \PHPUnit\DbUnit\TestCase::getConnection()
+     * @see \IPLib\Test\TestCaseBase::doSetUp()
      */
-    public function getConnection()
+    protected function doSetUp()
     {
-        if ($this->connection === null) {
-            if (self::$pdo == null) {
-                $pdo = new PDO('sqlite::memory:');
-                $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-                $pdo->exec('
-                    CREATE TABLE ranges (
-                        id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                        rangeRepresentation TEXT(44) NOT NULL,
-                        addressType INTEGER NOT NULL,
-                        rangeFrom TEXT(39) NOT NULL,
-                        rangeTo TEXT(39) NOT NULL
-                    )
-                ');
-                self::$pdo = $pdo;
-            }
-            $this->connection = $this->createDefaultDBConnection(self::$pdo, ':memory:');
-        }
-
-        return $this->connection;
+        $this->getConnection()->exec('DELETE FROM ranges');
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @see \PHPUnit\DbUnit\TestCase::getDataSet()
+     * @return \PDO
      */
-    public function getDataSet()
+    protected function getConnection()
     {
-        return $this->createXMLDataSet(__DIR__ . '/dataset.xml');
+        if (self::$connection === null) {
+            $connection = new PDO('sqlite::memory:');
+            $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $connection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+            $connection->exec('
+                CREATE TABLE ranges (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                    rangeRepresentation TEXT(44) NOT NULL,
+                    addressType INTEGER NOT NULL,
+                    rangeFrom TEXT(39) NOT NULL,
+                    rangeTo TEXT(39) NOT NULL
+                )
+            ');
+            self::$connection = $connection;
+        }
+
+        return self::$connection;
     }
 }
