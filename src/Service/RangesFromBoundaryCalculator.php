@@ -154,8 +154,13 @@ class RangesFromBoundaryCalculator
      */
     private function subnetFromBits($bits, $networkPrefix)
     {
-        $address = $this->addressFromBits($bits);
+        $startAddress = $this->addressFromBits($bits);
+        $numOnes = $this->numBits - $networkPrefix;
+        if ($numOnes === 0) {
+            return new Subnet($startAddress, $startAddress, $networkPrefix);
+        }
+        $endAddress = $this->addressFromBits(substr($bits, 0, -$numOnes) . str_repeat('1', $numOnes));
 
-        return new Subnet($address, $address, $networkPrefix);
+        return new Subnet($startAddress, $endAddress, $networkPrefix);
     }
 }
