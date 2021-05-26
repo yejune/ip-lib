@@ -78,6 +78,62 @@ echo (string) $address->getPreviousAddress();
 echo (string) $address->getNextAddress();
 ```
 
+### Get the addresses at a specified offset
+
+For addresses:
+
+```php
+$address = \IPLib\Factory::addressFromString('::1');
+
+// This will print ::1
+echo (string) $address->getAddressAtOffset(0);
+
+// This will print ::2
+echo (string) $address->getAddressAtOffset(1);
+
+// This will print ::3
+echo (string) $address->getAddressAtOffset(2);
+
+// This will print ::3e9
+echo (string) $address->getAddressAtOffset(1000);
+
+// This will print ::
+echo (string) $address->getAddressAtOffset(-1);
+
+// This will print NULL
+echo var_dump($address->getAddressAtOffset(-2));
+```
+
+For ranges:
+
+```php
+$range = \IPLib\Factory::rangeFromString('::ff00/120');
+
+// This will print ::ff00
+echo (string) $range->getAddressAtOffset(0);
+
+// This will print ::ff10
+echo (string) $range->getAddressAtOffset(16);
+
+// This will print ::ff64
+echo (string) $range->getAddressAtOffset(100);
+
+// This will print NULL because the address ::1:0 is out of the range
+var_dump($range->getAddressAtOffset(256));
+
+// This will print ::ffff
+echo (string) $range->getAddressAtOffset(-1);
+
+// This will print ::fff0
+echo (string) $range->getAddressAtOffset(-16);
+
+// This will print ::ff00
+echo (string) $range->getAddressAtOffset(-256);
+
+// This will print NULL because the address ::feff is out of the range
+var_dump($range->getAddressAtOffset(-257));
+```
+
 ### Parse an IP address range
 
 To parse a subnet (CIDR) range:

@@ -42,6 +42,19 @@ interface RangeInterface
     public function getRangeType();
 
     /**
+     * Get the address at a certain offset of this range.
+     *
+     * @param int $n the offset of the address (support negative offset)
+     *
+     * @return \IPLib\Address\AddressInterface|null return NULL if $n is not an integer or if the offset out of range
+     *
+     * @example: passing 256 to the range 127.0.0.0/16 will result in 127.0.1.0
+     * @example: passing -1 to the range 127.0.1.0/16 will result in 127.0.255.255
+     * @example: passing 256 to the range 127.0.0.0/24 will result in NULL
+     */
+    public function getAddressAtOffset($n);
+
+    /**
      * Check if this range contains an IP address.
      *
      * @param \IPLib\Address\AddressInterface $address
