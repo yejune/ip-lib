@@ -130,4 +130,11 @@ interface RangeInterface
      * @example for IPv6 it returns something like array('x.x.x.x..x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.ip6.arpa', 'x.x.x.x..x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.ip6.arpa') (where the number of 'x.' ranges from 1 to 32)
      */
     public function getReverseDNSLookupName();
+
+    /**
+     * Get the count of addresses this IP range contains.
+     *
+     * @return int|float Return float as for huge IPv6 networks, int is not enough.
+     */
+    public function getSize();
 }

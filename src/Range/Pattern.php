@@ -220,12 +220,8 @@ class Pattern extends AbstractRange
      */
     public function asSubnet()
     {
-        switch ($this->getAddressType()) {
-            case AddressType::T_IPv4:
-                return new Subnet($this->getStartAddress(), $this->getEndAddress(), 8 * (4 - $this->asterisksCount));
-            case AddressType::T_IPv6:
-                return new Subnet($this->getStartAddress(), $this->getEndAddress(), 16 * (8 - $this->asterisksCount));
-        }
+        $prefix = $this->getNetworkPrefix();
+        return new Subnet($this->getStartAddress(), $this->getEndAddress(), $prefix);
     }
 
     /**
@@ -271,5 +267,31 @@ class Pattern extends AbstractRange
     public function getReverseDNSLookupName()
     {
         return $this->asterisksCount === 0 ? array($this->getStartAddress()->getReverseDNSLookupName()) : $this->asSubnet()->getReverseDNSLookupName();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @see \IPLib\Range\RangeInterface::getSize()
+     */
+    public function getSize()
+    {
+        $fromAddress = $this->fromAddress;
+        $maxPrefix = $fromAddress::getNumberOfBits();
+        $prefix = $this->getNetworkPrefix();
+        return pow(2, ($maxPrefix - $prefix));
+    }
+
+    /**
+     * @return float|int
+     */
+    private function getNetworkPrefix()
+    {
+        switch ($this->getAddressType()) {
+            case AddressType::T_IPv4:
+                return 8 * (4 - $this->asterisksCount);
+            case AddressType::T_IPv6:
+                return 16 * (8 - $this->asterisksCount);
+        }
     }
 }

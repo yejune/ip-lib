@@ -302,4 +302,17 @@ class Subnet extends AbstractRange
 
         return $result;
     }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @see \IPLib\Range\RangeInterface::getSize()
+     */
+    public function getSize()
+    {
+        $fromAddress = $this->fromAddress;
+        $maxPrefix = $fromAddress::getNumberOfBits();
+        $prefix = $this->getNetworkPrefix();
+        return pow(2, ($maxPrefix - $prefix));
+    }
 }
