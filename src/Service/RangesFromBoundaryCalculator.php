@@ -7,12 +7,12 @@ use IPLib\Factory;
 use IPLib\Range\Subnet;
 
 /**
- * Helper class to calculate the subnets describing all (and only all) the addresses between two bouundaries.
+ * Helper class to calculate the subnets describing all (and only all) the addresses between two boundaries.
  */
 class RangesFromBoundaryCalculator
 {
     /**
-     * The BinaryMath instance to be used to perform bitwise poerations.
+     * The BinaryMath instance to be used to perform bitwise operations.
      *
      * @var \IPLib\Service\BinaryMath
      */
@@ -53,7 +53,7 @@ class RangesFromBoundaryCalculator
     }
 
     /**
-     * Calculate the subnets describing all (and only all) the addresses between two bouundaries.
+     * Calculate the subnets describing all (and only all) the addresses between two boundaries.
      *
      * @param \IPLib\Address\AddressInterface $from
      * @param \IPLib\Address\AddressInterface $to
