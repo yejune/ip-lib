@@ -381,6 +381,21 @@ echo \IPLib\Factory::rangeFromString('192.168.0.*')->getSubnetMask()->toString()
 echo \IPLib\Factory::rangeFromString('192.168.0.12/30')->getSubnetMask()->toString();
 ```
 
+### Getting the range size
+
+You can use the `getSize()` to get the count of addresses this IP range contains:
+
+```php
+// This will print 256
+echo \IPLib\Factory::rangeFromString('192.168.0.*')->getSize();
+
+// This will print 4
+echo \IPLib\Factory::rangeFromString('192.168.0.12/30')->getSize();
+
+// This will print 1
+echo \IPLib\Factory::rangeFromString('192.168.0.1')->getSize();
+```
+
 ### Getting the reverse DNS lookup address
 
 To perform reverse DNS queries, you need to use a special format of the IP addresses.

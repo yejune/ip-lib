@@ -313,6 +313,7 @@ class Subnet extends AbstractRange
         $fromAddress = $this->fromAddress;
         $maxPrefix = $fromAddress::getNumberOfBits();
         $prefix = $this->getNetworkPrefix();
+
         return pow(2, ($maxPrefix - $prefix));
     }
 }
