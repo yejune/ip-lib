@@ -134,7 +134,7 @@ interface RangeInterface
     /**
      * Get the count of addresses this IP range contains.
      *
-     * @return int|float Return float as for huge IPv6 networks, int is not enough.
+     * @return int|float Return float as for huge IPv6 networks, int is not enough
      */
     public function getSize();
 }

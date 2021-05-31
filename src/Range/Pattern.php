@@ -220,8 +220,7 @@ class Pattern extends AbstractRange
      */
     public function asSubnet()
     {
-        $prefix = $this->getNetworkPrefix();
-        return new Subnet($this->getStartAddress(), $this->getEndAddress(), $prefix);
+        return new Subnet($this->getStartAddress(), $this->getEndAddress(), $this->getNetworkPrefix());
     }
 
     /**
@@ -279,6 +278,7 @@ class Pattern extends AbstractRange
         $fromAddress = $this->fromAddress;
         $maxPrefix = $fromAddress::getNumberOfBits();
         $prefix = $this->getNetworkPrefix();
+
         return pow(2, ($maxPrefix - $prefix));
     }
 
