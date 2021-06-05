@@ -4,7 +4,6 @@ namespace IPLib\Range;
 
 use IPLib\Address\AddressInterface;
 use IPLib\Address\IPv4;
-use IPLib\Address\IPv6;
 use IPLib\Address\Type as AddressType;
 use IPLib\Factory;
 
