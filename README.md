@@ -1,4 +1,4 @@
-[![Tests](https://github.com/mlocati/ip-lib/workflows/tests/badge.svg)](https://github.com/mlocati/ip-lib/actions?query=workflow%3A%22tests%22)
+[![Tests](https://github.com/mlocati/ip-lib/actions/workflows/tests.yml/badge.svg)](https://github.com/mlocati/ip-lib/actions?query=workflow%3A%22tests%22)
 [![Coverage Status](https://coveralls.io/repos/github/mlocati/ip-lib/badge.svg?branch=master)](https://coveralls.io/github/mlocati/ip-lib?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/mlocati/ip-lib/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/mlocati/ip-lib/?branch=master)
 ![Packagist Downloads](https://img.shields.io/packagist/dm/mlocati/ip-lib)
