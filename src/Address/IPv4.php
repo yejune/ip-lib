@@ -114,15 +114,38 @@ class IPv4 implements AddressInterface
      */
     public static function parseString($address, $flags = 0)
     {
-        if (!is_string($address) || !strpos($address, '.')) {
+        if (!is_string($address)) {
             return null;
         }
         $flags = (int) $flags;
-        $rxChunk = '0?[0-9]{1,3}';
-        if ($flags & ParseStringFlag::IPV4_MAYBE_NON_DECIMAL) {
-            $rxChunk = "(?:0[Xx]0*[0-9A-Fa-f]{1,2})|(?:{$rxChunk})";
+        if ($flags & ParseStringFlag::IPV4ADDRESS_MAYBE_NON_QUAD_DOTTED) {
+            if (strpos($address, '.') === 0) {
+                return null;
+            }
+            $lengthNonHex = '{1,11}';
+            $lengthHex = '{1,8}';
+            $chunk234Optional = true;
+        } else {
+            if (!strpos($address, '.')) {
+                return null;
+            }
+            $lengthNonHex = '{1,3}';
+            $lengthHex = '{1,2}';
+            $chunk234Optional = false;
         }
-        $rx = "0*?({$rxChunk})\.0*?({$rxChunk})\.0*?({$rxChunk})\.0*?({$rxChunk})";
+        $rxChunk1 = "0?[0-9]{$lengthNonHex}";
+        if ($flags & ParseStringFlag::IPV4_MAYBE_NON_DECIMAL) {
+            $rxChunk1 = "(?:0[Xx]0*[0-9A-Fa-f]{$lengthHex})|(?:{$rxChunk1})";
+            $onlyDecimal = false;
+        } else {
+            $onlyDecimal = true;
+        }
+        $rxChunk1 = "0*?({$rxChunk1})";
+        $rxChunk234 = "\.{$rxChunk1}";
+        if ($chunk234Optional) {
+            $rxChunk234 = "(?:{$rxChunk234})?";
+        }
+        $rx = "{$rxChunk1}{$rxChunk234}{$rxChunk234}{$rxChunk234}";
         if ($flags & ParseStringFlag::MAY_INCLUDE_PORT) {
             $rx .= '(?::\d+)?';
         }
@@ -130,27 +153,16 @@ class IPv4 implements AddressInterface
         if (!preg_match('/^' . $rx . '$/', $address, $matches)) {
             return null;
         }
+        $math = new \IPLib\Service\UnsignedIntegerMath();
         $nums = array();
-        for ($i = 1; $i <= 4; $i++) {
-            $s = $matches[$i];
-            if ($flags & ParseStringFlag::IPV4_MAYBE_NON_DECIMAL) {
-                if (stripos($s, '0x') === 0) {
-                    $n = hexdec(substr($s, 2));
-                } elseif ($s[0] === '0') {
-                    if (!preg_match('/^[0-7]+$/', $s)) {
-                        return null;
-                    }
-                    $n = octdec(substr($s, 1));
-                } else {
-                    $n = (int) $s;
-                }
-            } else {
-                $n = (int) $s;
-            }
-            if ($n < 0 || $n > 255) {
+        $maxChunkIndex = count($matches) - 1;
+        for ($i = 1; $i <= $maxChunkIndex; $i++) {
+            $numBytes = $i === $maxChunkIndex ? 5 - $i : 1;
+            $chunkBytes = $math->getBytes($matches[$i], $numBytes, $onlyDecimal);
+            if ($chunkBytes === null) {
                 return null;
             }
-            $nums[] = (string) $n;
+            $nums = array_merge($nums, $chunkBytes);
         }
 
         return new static(implode('.', $nums));

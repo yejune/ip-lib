@@ -12,21 +12,29 @@ class UnsignedIntegerMath
      *
      * @param string $value
      * @param int $numBytes the wanted number of bytes
+     * @param bool $onlyDecimal Only parse decimal numbers
      *
      * @return int[]|null
      */
-    public function getBytes($value, $numBytes)
+    public function getBytes($value, $numBytes, $onlyDecimal = false)
     {
         $m = null;
-        if (preg_match('/^0[Xx]0*([0-9A-Fa-f]+)$/', $value, $m)) {
-            return $this->getBytesFromHexadecimal($m[1], $numBytes);
+        if ($onlyDecimal) {
+            if (preg_match('/^0*(\d+)$/', $value, $m)) {
+                return $this->getBytesFromDecimal($m[1], $numBytes);
+            }
+        } else {
+            if (preg_match('/^0[Xx]0*([0-9A-Fa-f]+)$/', $value, $m)) {
+                return $this->getBytesFromHexadecimal($m[1], $numBytes);
+            }
+            if (preg_match('/^0+([0-7]*)$/', $value, $m)) {
+                return $this->getBytesFromOctal($m[1], $numBytes);
+            }
+            if (preg_match('/^[1-9][0-9]*$/', $value)) {
+                return $this->getBytesFromDecimal($value, $numBytes);
+            }
         }
-        if (preg_match('/^0+([0-7]*)$/', $value, $m)) {
-            return $this->getBytesFromOctal($m[1], $numBytes);
-        }
-        if (preg_match('/^[1-9][0-9]*$/', $value)) {
-            return $this->getBytesFromDecimal($value, $numBytes);
-        }
+
         // Not a valid number
         return null;
     }

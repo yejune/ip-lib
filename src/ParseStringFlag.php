@@ -49,7 +49,7 @@ class ParseStringFlag
     const IPV4SUBNET_MAYBE_COMPACT = 8;
 
     /**
-     * Use this flag if IPv4 addresses may be in non quad-dotted decimal notation.
+     * Use this flag if IPv4 addresses may be in non quad-dotted notation.
      * This notation is accepted by the implementation of inet_aton and inet_addr of the libc implementation of GNU, Windows and Mac (but not Musl), but not by inet_pton and ip2long.
      *
      * @var int
@@ -63,5 +63,5 @@ class ParseStringFlag
      * @see https://www.freebsd.org/cgi/man.cgi?query=inet_net&sektion=3&apropos=0&manpath=FreeBSD+12.2-RELEASE+and+Ports#end
      * @see http://git.musl-libc.org/cgit/musl/tree/src/network/inet_aton.c?h=v1.2.2
      */
-    // @todo const IPV4ADDRESS_MAYBE_NON_QUAD_DOTTED = 16;
+    const IPV4ADDRESS_MAYBE_NON_QUAD_DOTTED = 16;
 }

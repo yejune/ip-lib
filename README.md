@@ -569,6 +569,36 @@ var_export((string) Factory::parseAddressString('127.0.0.010'));
 var_export((string) Factory::parseAddressString('127.0.0.010', ParseStringFlag::IPV4_MAYBE_NON_DECIMAL));
 ```
 
+### Accepting IPv4 addresses in nod-quad-dotted notation
+
+IPv4 addresses are usually expressed with 4 numbers, for example as `192.168.0.1`.
+
+By the way, the GNU (used in many Linux distros), BSD (used in Mac) and Windows implementations of `inet_aton` and `inet_addr` [accept IPv4 addresses with 1 to 4 numbers](https://man7.org/linux/man-pages/man3/inet_addr.3.html#DESCRIPTION).
+
+Please remark that this does not apply to the `inet_pton` and `ip2long` functions, as well as to the Musl implementation (used in Alpine Linux) of `inet_aton` and `inet_addr`.
+
+If you want to accept this non-decimal syntax, you may use the `IPLib\ParseStringFlag::IPV4ADDRESS_MAYBE_NON_QUAD_DOTTED` flag:
+
+```php
+use IPLib\Factory;
+use IPLib\ParseStringFlag;
+
+// This will print NULL
+var_export(Factory::parseAddressString('1.2.500'));
+
+// This will print 0.0.0.0
+var_export((string) Factory::parseAddressString('0', ParseStringFlag::IPV4ADDRESS_MAYBE_NON_QUAD_DOTTED));
+
+// This will print 0.0.0.1
+var_export((string) Factory::parseAddressString('1', ParseStringFlag::IPV4ADDRESS_MAYBE_NON_QUAD_DOTTED));
+
+// This will print 0.0.1.244
+var_export((string) Factory::parseAddressString('0.0.500', ParseStringFlag::IPV4ADDRESS_MAYBE_NON_QUAD_DOTTED));
+
+// This will print 255.255.255.255
+var_export((string) Factory::parseAddressString('4294967295', ParseStringFlag::IPV4ADDRESS_MAYBE_NON_QUAD_DOTTED));
+```
+
 ### Accepting compact IPv4 subnet notation
 
 Even if there isn't an RFC that describe it, IPv4 subnet notation may also be written in a compact form, omitting extra digits (for example, `127.0.0.0/24` may be written as `127/24`).

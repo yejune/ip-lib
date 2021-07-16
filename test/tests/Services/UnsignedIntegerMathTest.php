@@ -63,6 +63,10 @@ class UnsignedIntegerMathTest extends TestCase
             array('037777777777', 4, array(0xFF, 0xFF, 0xFF, 0xFF)),
             array('00000000000000000000000000000000000000000000000000000000000000000000037777777777', 4, array(0xFF, 0xFF, 0xFF, 0xFF)),
             array('0xFFFFFFFF', 9, array(0, 0, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF)),
+            array('0', 1, array(0), true),
+            array('077', 1, array(77), true),
+            array('000000000000000000000000000000000000000000000000000000000000000000000077', 1, array(77), true),
+            array('0x0', 1, null, true),
         ));
     }
 
@@ -72,17 +76,18 @@ class UnsignedIntegerMathTest extends TestCase
      * @param string $value
      * @param int $numBytes
      * @param int[]|null $expectedResult
+     * @param bool $onlyDecimal
      */
-    public function testGetBytes($value, $numBytes, array $expectedResult = null)
+    public function testGetBytes($value, $numBytes, array $expectedResult = null, $onlyDecimal = false)
     {
         $maxSignedIntegers = PHP_INT_SIZE === 4 ? array(null) : array(null, 0x7FFFFFFF);
         foreach ($maxSignedIntegers as $maxSignedInteger) {
             self::$math->setMaxSignedInt($maxSignedInteger);
-            $actualResult = self::$math->getBytes($value, $numBytes);
+            $actualResult = self::$math->getBytes($value, $numBytes, $onlyDecimal);
             $this->assertSame($expectedResult, $actualResult);
-            $actualResult = self::$math->getBytes(strtolower($value), $numBytes);
+            $actualResult = self::$math->getBytes(strtolower($value), $numBytes, $onlyDecimal);
             $this->assertSame($expectedResult, $actualResult);
-            $actualResult = self::$math->getBytes(strtoupper($value), $numBytes);
+            $actualResult = self::$math->getBytes(strtoupper($value), $numBytes, $onlyDecimal);
             $this->assertSame($expectedResult, $actualResult);
         }
     }
