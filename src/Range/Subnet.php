@@ -6,6 +6,7 @@ use IPLib\Address\AddressInterface;
 use IPLib\Address\IPv4;
 use IPLib\Address\Type as AddressType;
 use IPLib\Factory;
+use IPLib\ParseStringFlag;
 
 /**
  * Represents an address range in subnet format (eg CIDR).
@@ -77,14 +78,34 @@ class Subnet extends AbstractRange
     }
 
     /**
+     * @deprecated since 1.17.0: use the parseString() method instead.
+     * For upgrading:
+     * - if $supportNonDecimalIPv4 is true, use the ParseStringFlag::IPV4_MAYBE_NON_DECIMAL flag
+     *
+     * @param string|mixed $range
+     * @param bool $supportNonDecimalIPv4
+     *
+     * @return static|null
+     *
+     * @see \IPLib\Range\Subnet::parseString()
+     */
+    public static function fromString($range, $supportNonDecimalIPv4 = false)
+    {
+        return static::parseString($range, ParseStringFlag::MAY_INCLUDE_PORT | ParseStringFlag::MAY_INCLUDE_ZONEID | ($supportNonDecimalIPv4 ? ParseStringFlag::IPV4_MAYBE_NON_DECIMAL : 0));
+    }
+
+    /**
      * Try get the range instance starting from its string representation.
      *
      * @param string|mixed $range
-     * @param bool $supportNonDecimalIPv4 set to true to support parsing non decimal (that is, octal and hexadecimal) IPv4 addresses
+     * @param int $flags A combination or zero or more flags
      *
      * @return static|null
+     *
+     * @since 1.17.0
+     * @see \IPLib\ParseStringFlag
      */
-    public static function fromString($range, $supportNonDecimalIPv4 = false)
+    public static function parseString($range, $flags = 0)
     {
         if (!is_string($range)) {
             return null;
@@ -93,7 +114,8 @@ class Subnet extends AbstractRange
         if (count($parts) !== 2) {
             return null;
         }
-        $address = Factory::addressFromString($parts[0], true, true, $supportNonDecimalIPv4);
+        $flags = (int) $flags;
+        $address = Factory::parseAddressString($parts[0], $flags);
         if ($address === null) {
             return null;
         }
@@ -220,7 +242,7 @@ class Subnet extends AbstractRange
     public static function get6to4()
     {
         if (self::$sixToFour === null) {
-            self::$sixToFour = self::fromString('2002::/16');
+            self::$sixToFour = self::parseString('2002::/16');
         }
 
         return self::$sixToFour;

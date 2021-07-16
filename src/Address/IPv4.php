@@ -2,6 +2,7 @@
 
 namespace IPLib\Address;
 
+use IPLib\ParseStringFlag;
 use IPLib\Range\RangeInterface;
 use IPLib\Range\Subnet;
 use IPLib\Range\Type as RangeType;
@@ -82,25 +83,47 @@ class IPv4 implements AddressInterface
     }
 
     /**
+     * @deprecated since 1.17.0: use the parseString() method instead.
+     * For upgrading:
+     * - if $mayIncludePort is true, use the ParseStringFlag::MAY_INCLUDE_PORT flag
+     * - if $supportNonDecimalIPv4 is true, use the ParseStringFlag::IPV4_MAYBE_NON_DECIMAL flag
+     *
+     * @param string|mixed $address the address to parse
+     * @param bool $mayIncludePort
+     * @param bool $supportNonDecimalIPv4
+     *
+     * @return static|null
+     *
+     * @see \IPLib\Address\IPv4::parseString()
+     */
+    public static function fromString($address, $mayIncludePort = true, $supportNonDecimalIPv4 = false)
+    {
+        return static::parseString($address, 0 | ($mayIncludePort ? ParseStringFlag::MAY_INCLUDE_PORT : 0) | ($supportNonDecimalIPv4 ? ParseStringFlag::IPV4_MAYBE_NON_DECIMAL : 0));
+    }
+
+    /**
      * Parse a string and returns an IPv4 instance if the string is valid, or null otherwise.
      *
      * @param string|mixed $address the address to parse
-     * @param bool $mayIncludePort set to false to avoid parsing addresses with ports
-     * @param bool $supportNonDecimalIPv4 set to true to support parsing non decimal (that is, octal and hexadecimal) IPv4 addresses
+     * @param int $flags A combination or zero or more flags
      *
      * @return static|null
+     *
+     * @since 1.17.0
+     * @see \IPLib\ParseStringFlag
      */
-    public static function fromString($address, $mayIncludePort = true, $supportNonDecimalIPv4 = false)
+    public static function parseString($address, $flags = 0)
     {
         if (!is_string($address) || !strpos($address, '.')) {
             return null;
         }
+        $flags = (int) $flags;
         $rxChunk = '0?[0-9]{1,3}';
-        if ($supportNonDecimalIPv4) {
+        if ($flags & ParseStringFlag::IPV4_MAYBE_NON_DECIMAL) {
             $rxChunk = "(?:0[Xx]0*[0-9A-Fa-f]{1,2})|(?:{$rxChunk})";
         }
         $rx = "0*?({$rxChunk})\.0*?({$rxChunk})\.0*?({$rxChunk})\.0*?({$rxChunk})";
-        if ($mayIncludePort) {
+        if ($flags & ParseStringFlag::MAY_INCLUDE_PORT) {
             $rx .= '(?::\d+)?';
         }
         $matches = null;
@@ -110,7 +133,7 @@ class IPv4 implements AddressInterface
         $nums = array();
         for ($i = 1; $i <= 4; $i++) {
             $s = $matches[$i];
-            if ($supportNonDecimalIPv4) {
+            if ($flags & ParseStringFlag::IPV4_MAYBE_NON_DECIMAL) {
                 if (stripos($s, '0x') === 0) {
                     $n = hexdec(substr($s, 2));
                 } elseif ($s[0] === '0') {
@@ -318,10 +341,10 @@ class IPv4 implements AddressInterface
                 $exceptions = array();
                 if (isset($data[1])) {
                     foreach ($data[1] as $exceptionRange => $exceptionType) {
-                        $exceptions[] = new AssignedRange(Subnet::fromString($exceptionRange), $exceptionType);
+                        $exceptions[] = new AssignedRange(Subnet::parseString($exceptionRange), $exceptionType);
                     }
                 }
-                $reservedRanges[] = new AssignedRange(Subnet::fromString($range), $data[0], $exceptions);
+                $reservedRanges[] = new AssignedRange(Subnet::parseString($range), $data[0], $exceptions);
             }
             self::$reservedRanges = $reservedRanges;
         }
@@ -359,7 +382,7 @@ class IPv4 implements AddressInterface
     {
         $myBytes = $this->getBytes();
 
-        return IPv6::fromString('2002:' . sprintf('%02x', $myBytes[0]) . sprintf('%02x', $myBytes[1]) . ':' . sprintf('%02x', $myBytes[2]) . sprintf('%02x', $myBytes[3]) . '::');
+        return IPv6::parseString('2002:' . sprintf('%02x', $myBytes[0]) . sprintf('%02x', $myBytes[1]) . ':' . sprintf('%02x', $myBytes[2]) . sprintf('%02x', $myBytes[3]) . '::');
     }
 
     /**

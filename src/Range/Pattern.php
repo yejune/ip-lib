@@ -6,6 +6,7 @@ use IPLib\Address\AddressInterface;
 use IPLib\Address\IPv4;
 use IPLib\Address\IPv6;
 use IPLib\Address\Type as AddressType;
+use IPLib\ParseStringFlag;
 
 /**
  * Represents an address range in pattern format (only ending asterisks are supported).
@@ -68,23 +69,43 @@ class Pattern extends AbstractRange
     }
 
     /**
+     * @deprecated since 1.17.0: use the parseString() method instead.
+     * For upgrading:
+     * - if $supportNonDecimalIPv4 is true, use the ParseStringFlag::IPV4_MAYBE_NON_DECIMAL flag
+     *
+     * @param string|mixed $range
+     * @param bool $supportNonDecimalIPv4
+     *
+     * @return static|null
+     *
+     * @see \IPLib\Range\Pattern::parseString()
+     */
+    public static function fromString($range, $supportNonDecimalIPv4 = false)
+    {
+        return static::parseString($range, ParseStringFlag::MAY_INCLUDE_PORT | ParseStringFlag::MAY_INCLUDE_ZONEID | ($supportNonDecimalIPv4 ? ParseStringFlag::IPV4_MAYBE_NON_DECIMAL : 0));
+    }
+
+    /**
      * Try get the range instance starting from its string representation.
      *
      * @param string|mixed $range
-     * @param bool $supportNonDecimalIPv4 set to true to support parsing non decimal (that is, octal and hexadecimal) IPv4 addresses
+     * @param int $flags A combination or zero or more flags
      *
      * @return static|null
+     *
+     * @since 1.17.0
+     * @see \IPLib\ParseStringFlag
      */
-    public static function fromString($range, $supportNonDecimalIPv4 = false)
+    public static function parseString($range, $flags = 0)
     {
         if (!is_string($range) || strpos($range, '*') === false) {
             return null;
         }
         if ($range === '*.*.*.*') {
-            return new static(IPv4::fromString('0.0.0.0'), IPv4::fromString('255.255.255.255'), 4);
+            return new static(IPv4::parseString('0.0.0.0'), IPv4::parseString('255.255.255.255'), 4);
         }
         if ($range === '*:*:*:*:*:*:*:*') {
-            return new static(IPv6::fromString('::'), IPv6::fromString('ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff'), 8);
+            return new static(IPv6::parseString('::'), IPv6::parseString('ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff'), 8);
         }
         $matches = null;
         if (strpos($range, '.') !== false && preg_match('/^[^*]+((?:\.\*)+)$/', $range, $matches)) {
@@ -96,7 +117,7 @@ class Pattern extends AbstractRange
                     $asterisksCount += $missingDots;
                 }
             }
-            $fromAddress = IPv4::fromString(str_replace('*', '0', $range), true, $supportNonDecimalIPv4);
+            $fromAddress = IPv4::parseString(str_replace('*', '0', $range), $flags);
             if ($fromAddress === null) {
                 return null;
             }
@@ -108,7 +129,7 @@ class Pattern extends AbstractRange
         }
         if (strpos($range, ':') !== false && preg_match('/^[^*]+((?::\*)+)$/', $range, $matches)) {
             $asterisksCount = strlen($matches[1]) >> 1;
-            $fromAddress = IPv6::fromString(str_replace('*', '0', $range));
+            $fromAddress = IPv6::parseString(str_replace('*', '0', $range));
             if ($fromAddress === null) {
                 return null;
             }
