@@ -115,6 +115,12 @@ class Subnet extends AbstractRange
             return null;
         }
         $flags = (int) $flags;
+        if (strpos($parts[0], ':') === false && $flags & ParseStringFlag::IPV4SUBNET_MAYBE_COMPACT) {
+            $missingDots = 3 - substr_count($parts[0], '.');
+            if ($missingDots > 0) {
+                $parts[0] .= str_repeat('.0', $missingDots);
+            }
+        }
         $address = Factory::parseAddressString($parts[0], $flags);
         if ($address === null) {
             return null;

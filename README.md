@@ -569,6 +569,22 @@ var_export((string) Factory::parseAddressString('127.0.0.010'));
 var_export((string) Factory::parseAddressString('127.0.0.010', ParseStringFlag::IPV4_MAYBE_NON_DECIMAL));
 ```
 
+### Accepting compact IPv4 subnet notation
+
+Even if there isn't an RFC that describe it, IPv4 subnet notation may also be written in a compact form, omitting extra digits (for example, `127.0.0.0/24` may be written as `127/24`).
+If you want to accept such format, you can specify the `IPLib\ParseStringFlag::IPV4SUBNET_MAYBE_COMPACT` flag:
+
+```php
+use IPLib\Factory;
+use IPLib\ParseStringFlag;
+
+// This will print NULL
+var_export(Factory::parseRangeString('127/24'));
+
+// This will print 127.0.0.0/24
+echo (string) Factory::parseRangeString('127/24', ParseStringFlag::IPV4SUBNET_MAYBE_COMPACT);
+```
+
 ### Combining multiple flags
 
 Of course, you may use more than one `IPLib\ParseStringFlag` flag at once:
