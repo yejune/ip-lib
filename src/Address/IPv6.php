@@ -56,7 +56,7 @@ class IPv6 implements AddressInterface
      *
      * @var array|null
      */
-    private static $reservedRanges = null;
+    private static $reservedRanges;
 
     /**
      * Initializes the instance.
