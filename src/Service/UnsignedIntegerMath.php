@@ -4,6 +4,8 @@ namespace IPLib\Service;
 
 /**
  * Helper class to work with unsigned integers.
+ *
+ * @internal
  */
 class UnsignedIntegerMath
 {

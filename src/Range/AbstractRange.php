@@ -8,6 +8,9 @@ use IPLib\Address\IPv6;
 use IPLib\Address\Type as AddressType;
 use IPLib\Factory;
 
+/**
+ * Base class for range classes.
+ */
 abstract class AbstractRange implements RangeInterface
 {
     /**

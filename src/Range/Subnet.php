@@ -41,6 +41,8 @@ class Subnet extends AbstractRange
      * The type of the range of this IP range.
      *
      * @var int|null
+     *
+     * @since 1.5.0
      */
     protected $rangeType;
 
@@ -88,6 +90,7 @@ class Subnet extends AbstractRange
      * @return static|null
      *
      * @see \IPLib\Range\Subnet::parseString()
+     * @since 1.10.0 added the $supportNonDecimalIPv4 argument
      */
     public static function fromString($range, $supportNonDecimalIPv4 = false)
     {
@@ -102,8 +105,8 @@ class Subnet extends AbstractRange
      *
      * @return static|null
      *
-     * @since 1.17.0
      * @see \IPLib\ParseStringFlag
+     * @since 1.17.0
      */
     public static function parseString($range, $flags = 0)
     {
@@ -224,9 +227,10 @@ class Subnet extends AbstractRange
     }
 
     /**
-     * Get the pattern (asterisk) representation (if applicable) of this range.
+     * {@inheritdoc}
      *
-     * @return \IPLib\Range\Pattern|null return NULL if this range can't be represented by a pattern notation
+     * @see \IPLib\Range\RangeInterface::asPattern()
+     * @since 1.8.0
      */
     public function asPattern()
     {
@@ -244,6 +248,8 @@ class Subnet extends AbstractRange
      * Get the 6to4 address IPv6 address range.
      *
      * @return self
+     *
+     * @since 1.5.0
      */
     public static function get6to4()
     {
@@ -258,6 +264,8 @@ class Subnet extends AbstractRange
      * Get subnet prefix.
      *
      * @return int
+     *
+     * @since 1.7.0
      */
     public function getNetworkPrefix()
     {

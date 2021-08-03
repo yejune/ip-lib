@@ -51,8 +51,8 @@ class Single extends AbstractRange
      *
      * @return static|null
      *
-     * @since 1.17.0
      * @see \IPLib\Range\Single::parseString()
+     * @since 1.10.0 added the $supportNonDecimalIPv4 argument
      */
     public static function fromString($range, $supportNonDecimalIPv4 = false)
     {
@@ -67,8 +67,8 @@ class Single extends AbstractRange
      *
      * @return static|null
      *
-     * @since 1.17.0
      * @see \IPLib\ParseStringFlag
+     * @since 1.17.0
      */
     public static function parseString($range, $flags = 0)
     {
@@ -88,6 +88,8 @@ class Single extends AbstractRange
      * @param \IPLib\Address\AddressInterface $address
      *
      * @return static
+     *
+     * @since 1.2.0
      */
     public static function fromAddress(AddressInterface $address)
     {

@@ -95,6 +95,8 @@ class IPv4 implements AddressInterface
      * @return static|null
      *
      * @see \IPLib\Address\IPv4::parseString()
+     * @since 1.1.0 added the $mayIncludePort argument
+     * @since 1.10.0 added the $supportNonDecimalIPv4 argument
      */
     public static function fromString($address, $mayIncludePort = true, $supportNonDecimalIPv4 = false)
     {
@@ -109,8 +111,8 @@ class IPv4 implements AddressInterface
      *
      * @return static|null
      *
-     * @since 1.17.0
      * @see \IPLib\ParseStringFlag
+     * @since 1.17.0
      */
     public static function parseString($address, $flags = 0)
     {
@@ -214,6 +216,8 @@ class IPv4 implements AddressInterface
      *
      * @return string
      *
+     * @since 1.10.0
+     *
      * @example if $long == false: if the decimal representation is '0.7.8.255': '0.7.010.0377'
      * @example if $long == true: if the decimal representation is '0.7.8.255': '0000.0007.0010.0377'
      */
@@ -237,6 +241,8 @@ class IPv4 implements AddressInterface
      * @param bool $long
      *
      * @return string
+     *
+     * @since 1.10.0
      *
      * @example if $long == false: if the decimal representation is '0.9.10.255': '0.9.0xa.0xff'
      * @example if $long == true: if the decimal representation is '0.9.10.255': '0x00.0x09.0x0a.0xff'
@@ -401,6 +407,8 @@ class IPv4 implements AddressInterface
      * Create an IPv6 representation of this address (in IPv6 IPv4-mapped notation).
      *
      * @return \IPLib\Address\IPv6
+     *
+     * @since 1.11.0
      */
     public function toIPv6IPv4Mapped()
     {

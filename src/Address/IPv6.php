@@ -105,6 +105,8 @@ class IPv6 implements AddressInterface
      * @return static|null
      *
      * @see \IPLib\Address\IPv6::parseString()
+     * @since 1.1.0 added the $mayIncludePort argument
+     * @since 1.3.0 added the $mayIncludeZoneID argument
      */
     public static function fromString($address, $mayIncludePort = true, $mayIncludeZoneID = true)
     {
@@ -119,8 +121,8 @@ class IPv6 implements AddressInterface
      *
      * @return static|null
      *
-     * @since 1.17.0
      * @see \IPLib\ParseStringFlag
+     * @since 1.17.0
      */
     public static function parseString($address, $flags = 0)
     {
@@ -494,6 +496,7 @@ class IPv6 implements AddressInterface
      * @example '0000:0000:0000:0000:0000:0000:013.001.068.003' when $ipV6Long and $ipV4Long are true
      *
      * @see https://tools.ietf.org/html/rfc4291#section-2.2 point 3.
+     * @since 1.9.0
      */
     public function toMixedIPv6IPv4String($ipV6Long = false, $ipV4Long = false)
     {

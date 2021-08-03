@@ -41,6 +41,8 @@ class Pattern extends AbstractRange
      * The type of the range of this IP range.
      *
      * @var int|false|null false if this range crosses multiple range types, null if yet to be determined
+     *
+     * @since 1.5.0
      */
     protected $rangeType;
 
@@ -79,6 +81,7 @@ class Pattern extends AbstractRange
      * @return static|null
      *
      * @see \IPLib\Range\Pattern::parseString()
+     * @since 1.10.0 added the $supportNonDecimalIPv4 argument
      */
     public static function fromString($range, $supportNonDecimalIPv4 = false)
     {
@@ -238,6 +241,7 @@ class Pattern extends AbstractRange
      * {@inheritdoc}
      *
      * @see \IPLib\Range\RangeInterface::asSubnet()
+     * @since 1.8.0
      */
     public function asSubnet()
     {
