@@ -3,6 +3,7 @@
 namespace IPLib\Test\Addresses;
 
 use IPLib\Factory;
+use IPLib\ParseStringFlag;
 use IPLib\Test\TestCase;
 
 class NonDecimalIPv4AddressTest extends TestCase
@@ -226,5 +227,62 @@ class NonDecimalIPv4AddressTest extends TestCase
         $hexLong = $ip->toHexadecimal(true);
         $this->assertSame($expected[self::HEX_LONG], $hexLong);
         $this->assertEquals($expected[self::DEC_SHORT], (string) Factory::addressFromString($hexLong, false, false, true));
+    }
+
+    /**
+     * @return array
+     */
+    public function newCasesProvider()
+    {
+        return array(
+            array('0.0.0.0', 0, '0.0.0.0'),
+            array('077.0.0.0', 0, '77.0.0.0'),
+            array('077.0.0.0', ParseStringFlag::IPV4_MAYBE_NON_DECIMAL, '63.0.0.0'),
+            array('0xFa.0.0.0'),
+            array('0xFa.0.0.0', ParseStringFlag::IPV4_MAYBE_NON_DECIMAL, '250.0.0.0'),
+            array('0xFa.010.100.0000010'),
+            array('0xFa.010.100.0000011', ParseStringFlag::IPV4_MAYBE_NON_DECIMAL, '250.8.100.9'),
+            array('0'),
+            array('0', ParseStringFlag::IPV4ADDRESS_MAYBE_NON_QUAD_DOTTED, '0.0.0.0'),
+            array('010.020'),
+            array('010.020', ParseStringFlag::IPV4_MAYBE_NON_DECIMAL),
+            array('010.020', ParseStringFlag::IPV4_MAYBE_NON_DECIMAL | ParseStringFlag::IPV4ADDRESS_MAYBE_NON_QUAD_DOTTED, '8.0.0.16'),
+            array('010.1.020', ParseStringFlag::IPV4_MAYBE_NON_DECIMAL | ParseStringFlag::IPV4ADDRESS_MAYBE_NON_QUAD_DOTTED, '8.1.0.16'),
+            array('0xFFFFFFFF'),
+            array('0xFFFFFFFF', ParseStringFlag::IPV4_MAYBE_NON_DECIMAL),
+            array('0xFFFFFFFF', ParseStringFlag::IPV4ADDRESS_MAYBE_NON_QUAD_DOTTED),
+            array('0xFFFFFFFF', ParseStringFlag::IPV4_MAYBE_NON_DECIMAL | ParseStringFlag::IPV4ADDRESS_MAYBE_NON_QUAD_DOTTED, '255.255.255.255'),
+            array('0x100000000', ParseStringFlag::IPV4_MAYBE_NON_DECIMAL | ParseStringFlag::IPV4ADDRESS_MAYBE_NON_QUAD_DOTTED),
+            array('037777777777'),
+            array('037777777777', ParseStringFlag::IPV4_MAYBE_NON_DECIMAL),
+            array('037777777777', ParseStringFlag::IPV4ADDRESS_MAYBE_NON_QUAD_DOTTED),
+            array('037777777777', ParseStringFlag::IPV4_MAYBE_NON_DECIMAL | ParseStringFlag::IPV4ADDRESS_MAYBE_NON_QUAD_DOTTED, '255.255.255.255'),
+            array('037777777778', ParseStringFlag::IPV4_MAYBE_NON_DECIMAL | ParseStringFlag::IPV4ADDRESS_MAYBE_NON_QUAD_DOTTED),
+            array('4294967295'),
+            array('4294967295', ParseStringFlag::IPV4_MAYBE_NON_DECIMAL),
+            array('4294967295', ParseStringFlag::IPV4ADDRESS_MAYBE_NON_QUAD_DOTTED, '255.255.255.255'),
+            array('4294967295', ParseStringFlag::IPV4_MAYBE_NON_DECIMAL | ParseStringFlag::IPV4ADDRESS_MAYBE_NON_QUAD_DOTTED, '255.255.255.255'),
+            array('.0'),
+            array('.0', ParseStringFlag::IPV4_MAYBE_NON_DECIMAL | ParseStringFlag::IPV4ADDRESS_MAYBE_NON_QUAD_DOTTED),
+            array('4294967296', ParseStringFlag::IPV4_MAYBE_NON_DECIMAL | ParseStringFlag::IPV4ADDRESS_MAYBE_NON_QUAD_DOTTED),
+        );
+    }
+
+    /**
+     * @dataProvider newCasesProvider
+     *
+     * @param string|mixed $input
+     * @param int $flags
+     * @param string $expected
+     */
+    public function testNewCases($input, $flags = 0, $expected = '')
+    {
+        $ip = Factory::parseAddressString($input, $flags);
+        if ($expected === '') {
+            $this->assertNull($ip);
+        } else {
+            $this->assertInstanceof('IPLib\Address\IPv4', $ip);
+            $this->assertSame($expected, (string) $ip);
+        }
     }
 }

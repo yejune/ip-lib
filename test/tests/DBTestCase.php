@@ -9,7 +9,7 @@ abstract class DBTestCase extends TestCase
     /**
      * @var \PDO|null
      */
-    private static $connection = null;
+    private static $connection;
 
     /**
      * {@inheritdoc}
