@@ -423,7 +423,7 @@ $ipv6 = \IPLib\Factory::parseAddressString('e.b.a.b.e.f.a.c.0.0.0.0.0.0.0.0.0.0.
 echo $ipv4->toString();
 
 // This will print 1234:abcd::cafe:babe
-echo (string) $ipv6->toString();
+echo $ipv6->toString();
 ```
 
 You can also use `getReverseDNSLookupName()` for IP ranges.
