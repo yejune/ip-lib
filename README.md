@@ -151,7 +151,7 @@ $range = \IPLib\Range\Pattern::parseString('127.0.0.*');
 $range = \IPLib\Range\Pattern::parseString('::*');
 ```
 
-To parse an andress as a range:
+To parse an address as a range:
 
 ```php
 $range = \IPLib\Range\Single::parseString('127.0.0.1');
