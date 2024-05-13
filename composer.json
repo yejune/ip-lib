@@ -3,13 +3,18 @@
     "description": "Handle IPv4, IPv6 addresses and ranges",
     "type": "library",
     "license": "MIT",
-    "homepage": "https://github.com/mlocati/ip-lib",
+    "homepage": "https://github.com/limepie/ip-lib",
     "authors": [
         {
             "name": "Michele Locati",
             "homepage": "https://github.com/mlocati",
             "email": "mlocati@gmail.com",
             "role": "Author"
+        },{
+            "name": "yejune",
+            "homepage": "https://github.com/yejune",
+            "email": "k@yejune.com",
+            "role": "Contributor"
         }
     ],
     "keywords": [
