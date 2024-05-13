@@ -1,5 +1,5 @@
 {
-    "name": "mlocati/ip-lib",
+    "name": "limepie/ip-lib",
     "description": "Handle IPv4, IPv6 addresses and ranges",
     "type": "library",
     "license": "MIT",
